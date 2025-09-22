@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Npgsql;
 using System.Reflection.Metadata.Ecma335;
+using GestaoPessoas.Dtos;
 
 namespace GestaoPessoas.Services
 {

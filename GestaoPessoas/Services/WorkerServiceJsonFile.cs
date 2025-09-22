@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.Json;
+using GestaoPessoas.Dtos;
 
 namespace GestaoPessoas.Services
 {
@@ -40,7 +41,7 @@ namespace GestaoPessoas.Services
             return worker;
         }
 
-        public void RemoveWorker(int id)
+        public bool RemoveWorker(int id)
         {
             var workers = LoadWorkersFromJson()?.ToList() ?? new List<Worker>();
             var workerToRemove = workers.FirstOrDefault(w => w.Id == id);
@@ -50,10 +51,11 @@ namespace GestaoPessoas.Services
                 var options = new JsonSerializerOptions { WriteIndented = true };
                 string json = JsonSerializer.Serialize(workers, options);
                 File.WriteAllText(filepath, json);
+                return true;
             }
             else
             {
-                throw new KeyNotFoundException($"Worker with ID {id} not found.");
+                return false;
             }
         }
 

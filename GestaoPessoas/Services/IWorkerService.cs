@@ -1,4 +1,6 @@
-﻿namespace GestaoPessoas.Services
+﻿using GestaoPessoas.Dtos;
+
+namespace GestaoPessoas.Services
 {
     public interface IWorkerService
     {
