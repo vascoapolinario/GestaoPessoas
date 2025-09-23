@@ -47,7 +47,8 @@ namespace GestaoPessoas.Controllers
         [HttpPost(Name = "AddWorker")]
         public ActionResult<Worker> AddWorker(Worker newworker)
         {
-            return Ok(WorkerService.AddWorker(newworker));
+            Worker? createdWorker = WorkerService.AddWorker(newworker);
+            return CreatedAtAction(nameof(GetWorker), new {id = createdWorker.Id}, createdWorker);
         }
 
         [HttpDelete("{id}", Name = "DeleteWorker")]
