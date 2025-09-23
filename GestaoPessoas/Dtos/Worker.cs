@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace GestaoPessoas
+namespace GestaoPessoas.Dtos
 {
     public class Worker : IValidatableObject
     {
