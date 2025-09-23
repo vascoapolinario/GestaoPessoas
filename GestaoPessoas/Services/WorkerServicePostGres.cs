@@ -77,8 +77,8 @@ namespace GestaoPessoas.Services
         public bool RemoveWorker(int id)
         {
             using var conn = new NpgsqlConnection(_connectionString);
-            using var transaction = conn.BeginTransaction();
             conn.Open();
+            using var transaction = conn.BeginTransaction();
             using var cmd = new NpgsqlCommand("DELETE FROM workers WHERE id = @id", conn);
             cmd.Parameters.AddWithValue("id", id);
             int affectedRows = cmd.ExecuteNonQuery();
