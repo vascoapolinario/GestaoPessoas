@@ -11,21 +11,19 @@ namespace GestaoPessoas.Dtos
 
         [Required]
         [StringLength(100)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
-        public string? JobTitle { get; set; }
+        public string JobTitle { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
         [EmailAddress]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         public DateOnly BirthDate { get; set; }
-
-        public DateTimeOffset?  DAtaUltimoProcessamentoSalarial { get; set; }
 
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
