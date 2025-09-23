@@ -15,6 +15,17 @@ namespace GestaoPessoas.Services
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
+        private Worker DataToWorker(NpgsqlDataReader datareader) { 
+            return new Worker
+            {
+                Id = datareader.GetInt32(datareader.GetOrdinal("id")),
+                Name = datareader.GetString(datareader.GetOrdinal("name")),
+                JobTitle = datareader.GetString(datareader.GetOrdinal("job_title")),
+                Email = datareader.GetString(datareader.GetOrdinal("email")),
+                BirthDate = DateOnly.FromDateTime(datareader.GetDateTime(datareader.GetOrdinal("birth_date")))
+            };
+        }
+
         public Worker AddWorker(Worker worker)
         {
 
@@ -41,14 +52,7 @@ namespace GestaoPessoas.Services
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                workers.Add(new Worker
-                {
-                    Id = reader.GetInt32(reader.GetOrdinal("id")),
-                    Name = reader.GetString(reader.GetOrdinal("name")),
-                    JobTitle = reader.GetString(reader.GetOrdinal("job_title")),
-                    Email = reader.GetString(reader.GetOrdinal("email")),
-                    BirthDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("birth_date")))
-                });                
+                workers.Add(DataToWorker(reader));
             }
             return workers;
         }
@@ -62,14 +66,7 @@ namespace GestaoPessoas.Services
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                return new Worker
-                {
-                    Id = reader.GetInt32(0),
-                    Name = reader.GetString(1),
-                    JobTitle = reader.GetString(3),
-                    Email = reader.GetString(2),
-                    BirthDate = DateOnly.FromDateTime(reader.GetDateTime(4))
-                };
+                return DataToWorker(reader);
             }
             else
             {
