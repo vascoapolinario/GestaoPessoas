@@ -12,16 +12,14 @@ namespace GestaoPessoas.Controllers
     {
         //private static WorkerServiceJsonFile WorkerService = new WorkerServiceJsonFile("./workers.json");
 
-        private IWorkerService WorkerService;// = new WorkerServicePostGres(configuration);
-        private readonly IConfiguration configuration;
+        private readonly IWorkerService WorkerService;
 
         private readonly ILogger<WorkersController> _logger;
 
-        public WorkersController(ILogger<WorkersController> logger, IConfiguration configuration)
+        public WorkersController(ILogger<WorkersController> logger, IWorkerService workerService)
         {
             _logger = logger;
-            this.configuration = configuration;
-            WorkerService = new WorkerServicePostGres(configuration);
+            WorkerService = workerService;
         }
 
         [HttpGet(Name = "Workers")]
