@@ -22,7 +22,12 @@ namespace GestaoPessoas.Controllers
             WorkerService = workerService;
         }
 
+        /// <summary>
+        /// Retorna todos os trabalhadores.
+        /// </summary>
+        /// <returns>Lista de trabalhadores</returns>
         [HttpGet(Name = "Workers")]
+        [ProducesResponseType(typeof(IEnumerable<Worker>), StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<Worker>> GetWorkers()
         {
 
@@ -31,6 +36,11 @@ namespace GestaoPessoas.Controllers
 
         }
 
+        /// <summary>
+        /// Retorna um trabalhador através do seu ID.
+        /// </summary>
+        /// <param name="id">Id do trabalhador.</param>
+        /// <returns>O trabalhador caso seja encontrado, caso contrário resposta NotFound</returns>
         [HttpGet("{id}", Name = "Worker")]
         public ActionResult<Worker> GetWorker(int id)
         {
@@ -42,14 +52,28 @@ namespace GestaoPessoas.Controllers
             return Ok(worker);
         }
 
+        /// <summary>
+        /// Addiciona um novo trabalhador.
+        /// </summary>
+        /// <param name="newworker">O novo trabalhador a adicionar</param>
+        /// <returns>O worker e o seu url</returns>
         [HttpPost(Name = "AddWorker")]
+        [ProducesResponseType(typeof(Worker), StatusCodes.Status201Created)]
         public ActionResult<Worker> AddWorker(Worker newworker)
         {
             Worker? createdWorker = WorkerService.AddWorker(newworker);
             return CreatedAtAction(nameof(GetWorker), new {id = createdWorker.Id}, createdWorker);
         }
 
+
+        /// <summary>
+        /// Apaga um trabalhador através do seu ID.
+        /// </summary>
+        /// <param name="id">Id do trabalhador a apagar</param>
+        /// <returns>Código 200 para sucesso e 404 caso não seja encontrado o trabalhador</returns>
         [HttpDelete("{id}", Name = "DeleteWorker")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult DeleteWorker(int id)
         {
             if (WorkerService.RemoveWorker(id))
@@ -62,7 +86,14 @@ namespace GestaoPessoas.Controllers
             }
         }
 
+        /// <summary>
+        /// Atualiza um trabalhador.
+        /// </summary>
+        /// <param name="updatedWorker">Trabalhador a atualizar</param>
+        /// <returns>Código 200 com o trabalhador se encontrado ou 404 se o trabalhador não for encontrado.</returns>
         [HttpPut(Name = "UpdateWorker")]
+        [ProducesResponseType(typeof(Worker), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Worker> UpdateWorker(Worker updatedWorker)
         {
 
