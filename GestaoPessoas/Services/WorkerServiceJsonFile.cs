@@ -89,7 +89,7 @@ namespace GestaoPessoas.Services
             }
             else
             {
-                throw new KeyNotFoundException($"Worker with ID {worker.Id} not found.");
+                return null;
             }
         }
     }
