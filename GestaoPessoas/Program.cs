@@ -1,5 +1,4 @@
 using GestaoPessoas.Services;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Development.LocalMachine.json", optional: true, reloadOnChange: true);
 string? Implementation = builder.Configuration.GetValue<string>("WorkerService:Implementation");
 if (string.IsNullOrEmpty(Implementation))
-    throw new ConfigurationErrorsException("WorkerService:Implementation is not configured.");
+    throw new InvalidOperationException("WorkerService:Implementation is not configured.");
 Implementation = Implementation.ToLower();
 switch (Implementation)
 {
