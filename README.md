@@ -34,13 +34,16 @@ O projeto suporta dois tipos de persistência:
 
 Para personalizar as configurações apenas no seu ambiente de desenvolvimento, você pode criar um ficheiro de configuração local:
 
-1. Na raiz do projeto `GestaoPessoas`, crie um arquivo chamado `appsettings.Local.json`.
+1. Na raiz do projeto `GestaoPessoas`, crie um arquivo chamado `appsettings.Development.LocalMachine.json`.
 2. Insira as configurações que deseja sobrescrever apenas no seu ambiente, por exemplo:
 
 ```json
 {
+  "WorkerService": {
+    "Implementation": "jsonfile"
+  },
   "JsonWorkerService": {
-    "FilePath": "C:\\SeuUsuario\\Documentos\\workers.json"
+    "FilePath": "./Workers.json"
   }
 }
 ```
