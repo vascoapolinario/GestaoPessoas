@@ -3,7 +3,23 @@ using GestaoPessoas.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IWorkerService, WorkerServicePostGres>();
+
+builder.Configuration.AddJsonFile("appsettings.Development.LocalMachine.json", optional: true, reloadOnChange: true);
+string? Implementation = builder.Configuration.GetValue<string>("WorkerService:Implementation");
+if (string.IsNullOrEmpty(Implementation))
+    throw new InvalidOperationException("WorkerService:Implementation is not configured.");
+Implementation = Implementation.ToLower();
+switch (Implementation)
+{
+    case "postgres":
+        builder.Services.AddScoped<IWorkerService, WorkerServicePostGres>();
+        break;
+    case "jsonfile":
+        builder.Services.AddScoped<IWorkerService, WorkerServiceJsonFile>();
+        break;
+    default:
+        throw new NotSupportedException($"Implementation '{Implementation}' for '{nameof(IWorkerService)}' is not supported.");
+}
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
