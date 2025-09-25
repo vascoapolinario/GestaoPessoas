@@ -1,0 +1,113 @@
+# GestaoPessoas
+
+Uma aplicação .NET desenvolvida para fins de aprendizado sobre boas práticas e arquitetura .NET.
+
+## Sobre o Projeto
+
+O **GestaoPessoas** é uma aplicação simples para gerenciamento de colaboradores, criada com o objetivo de estudar e aplicar conceitos fundamentais de desenvolvimento em .NET, incluindo:
+
+- Arquitetura em camadas
+- Injeção de dependência
+- Padrões de design
+- APIs RESTful
+- Persistência de dados
+
+## Funcionalidades
+
+A aplicação oferece um CRUD completo para gerenciamento de colaboradores, permitindo:
+
+- Listar todos os colaboradores
+- Obter detalhes de um colaborador específico
+- Cadastrar novos colaboradores
+- Atualizar informações de colaboradores existentes
+- Remover colaboradores
+
+## Persistência de Dados
+
+O projeto suporta dois tipos de persistência:
+
+1. **PostgreSQL**: Configuração padrão para ambiente de produção
+2. **Arquivo JSON**: Para desenvolvimento e testes locais
+
+O sistema utiliza persistência local em arquivo JSON para facilitar o desenvolvimento e testes, sem necessidade de configurar um banco de dados.
+
+## Configuração Local
+
+### Como criar e utilizar um arquivo de configuração local
+
+Para personalizar as configurações apenas no seu ambiente de desenvolvimento, você pode criar um arquivo de configuração local:
+
+1. Na raiz do projeto `GestaoPessoas`, crie um arquivo chamado `appsettings.Local.json`.
+2. Insira as configurações que deseja sobrescrever apenas no seu ambiente, por exemplo:
+
+```json
+{
+  "JsonWorkerService": {
+    "FilePath": "C:\\SeuUsuario\\Documentos\\workers.json"
+  }
+}
+```
+
+3. Ao iniciar a aplicação, as configurações do arquivo local serão carregadas automaticamente, sobrepondo os valores padrão do `appsettings.json`.
+
+### Observações importantes sobre o arquivo local
+
+- O arquivo `appsettings.Local.json` está incluído no `.gitignore` e **não é versionado**
+- Serve exclusivamente para configurações específicas do seu ambiente de desenvolvimento
+- As configurações são carregadas automaticamente pelo ASP.NET Core
+- Você pode sobrescrever qualquer configuração presente no `appsettings.json` ou `appsettings.Development.json`
+
+## Como Executar
+
+1. Clone o repositório
+2. Navegue até a pasta do projeto
+3. Execute os comandos:
+
+```bash
+dotnet restore
+dotnet build
+dotnet run
+```
+
+4. Acesse a documentação da API em: `https://localhost:5001/swagger`
+
+## Tecnologias Utilizadas
+
+- .NET 8
+- ASP.NET Core Web API
+- System.Text.Json (para serialização JSON)
+- Npgsql (para PostgreSQL)
+- Swagger/OpenAPI
+
+## Estrutura do Projeto
+
+```
+GestaoPessoas/
+├── Controllers/          # Controladores da API
+├── Services/            # Camada de serviços
+├── Dtos/               # Objetos de transferência de dados
+├── Program.cs          # Ponto de entrada da aplicação
+└── appsettings.json    # Configurações da aplicação
+```
+
+## Contribuindo
+
+Este projeto foi criado para fins educacionais e está aberto a contribuições! Sinta-se à vontade para:
+
+- Abrir issues para reportar bugs ou sugerir melhorias
+- Enviar pull requests com correções ou novas funcionalidades
+- Compartilhar ideias e sugestões
+
+## Aprendizado
+
+Este projeto serve como um laboratório para explorar conceitos como:
+
+- Implementação de diferentes estratégias de persistência
+- Configuração flexível de aplicações .NET
+- Boas práticas de desenvolvimento de APIs
+- Padrões de arquitetura de software
+- Testes e validação de dados
+
+---
+
+**Nota**: Este é um projeto educacional. Todas as contribuições e sugestões são bem-vindas para torná-lo ainda mais útil como ferramenta de aprendizado!
