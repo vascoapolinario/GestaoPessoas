@@ -18,7 +18,7 @@ switch (Implementation)
         builder.Services.AddScoped<IWorkerService, WorkerServiceJsonFile>();
         break;
     default:
-        throw new NotSupportedException($"Implementation '{Implementation}' is not supported.");
+        throw new NotSupportedException($"Implementation '{Implementation}' for '{nameof(IWorkerService)}' is not supported.");
 }
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
