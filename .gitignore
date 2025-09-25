@@ -399,6 +399,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-# Local development configuration
-appsettings.Local.json
+GestaoPessoas/appsettings.Development.LocalMachine.json
