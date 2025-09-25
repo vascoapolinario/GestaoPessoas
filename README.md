@@ -1,6 +1,6 @@
 # GestaoPessoas
 
-Uma aplicação .NET desenvolvida para fins de aprendizado sobre boas práticas e arquitetura .NET.
+Uma aplicação .NET desenvolvida para fins de aprendizado sobre a arquitetura .NET.
 
 ## Sobre o Projeto
 
@@ -10,15 +10,14 @@ O **GestaoPessoas** é uma aplicação simples para gerenciamento de colaborador
 - Injeção de dependência
 - Padrões de design
 - APIs RESTful
-- Persistência de dados
 
 ## Funcionalidades
 
-A aplicação oferece um CRUD completo para gerenciamento de colaboradores, permitindo:
+A aplicação oferece um CRUD para gerenciamento de colaboradores, permitindo:
 
 - Listar todos os colaboradores
 - Obter detalhes de um colaborador específico
-- Cadastrar novos colaboradores
+- Adicionar novos colaboradores
 - Atualizar informações de colaboradores existentes
 - Remover colaboradores
 
@@ -26,16 +25,14 @@ A aplicação oferece um CRUD completo para gerenciamento de colaboradores, perm
 
 O projeto suporta dois tipos de persistência:
 
-1. **PostgreSQL**: Configuração padrão para ambiente de produção
-2. **Arquivo JSON**: Para desenvolvimento e testes locais
-
-O sistema utiliza persistência local em arquivo JSON para facilitar o desenvolvimento e testes, sem necessidade de configurar um banco de dados.
+1. **PostgreSQL**: Implementação para base de dados PostgreSQL
+2. **Arquivo JSON**: Implementação para persistência em arquivo JSON. Para desenvolvimento e testes locais
 
 ## Configuração Local
 
 ### Como criar e utilizar um arquivo de configuração local
 
-Para personalizar as configurações apenas no seu ambiente de desenvolvimento, você pode criar um arquivo de configuração local:
+Para personalizar as configurações apenas no seu ambiente de desenvolvimento, você pode criar um ficheiro de configuração local:
 
 1. Na raiz do projeto `GestaoPessoas`, crie um arquivo chamado `appsettings.Local.json`.
 2. Insira as configurações que deseja sobrescrever apenas no seu ambiente, por exemplo:
@@ -102,7 +99,6 @@ Este projeto foi criado para fins educacionais e está aberto a contribuições!
 
 Este projeto serve como um laboratório para explorar conceitos como:
 
-- Implementação de diferentes estratégias de persistência
 - Configuração flexível de aplicações .NET
 - Boas práticas de desenvolvimento de APIs
 - Padrões de arquitetura de software
