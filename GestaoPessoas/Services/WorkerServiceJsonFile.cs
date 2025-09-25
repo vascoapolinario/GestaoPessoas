@@ -8,9 +8,9 @@ namespace GestaoPessoas.Services
     {
         private string filepath;
 
-        public WorkerServiceJsonFile(string filePath)
+        public WorkerServiceJsonFile(IConfiguration configuration)
         {
-            filepath = filePath;
+            filepath = configuration.GetValue<string>("JsonWorkerService:FilePath") ?? "./workers.json";
         }
 
         private IEnumerable<Worker> LoadWorkersFromJson()
