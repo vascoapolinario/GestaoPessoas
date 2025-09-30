@@ -48,14 +48,20 @@ Para personalizar as configurações apenas no seu ambiente de desenvolvimento, 
 }
 ```
 
-3. Ao iniciar a aplicação, as configurações do arquivo local serão carregadas automaticamente, sobrepondo os valores padrão do `appsettings.json`.
+3. Ao iniciar a aplicação, as configurações do arquivo local serão carregadas automaticamente.
+4. (Opcional): Em caso de uso de PostgreSQL, é necessario adicionar a string de conexão que pode ser configurada como user secrets:
+   Para adicionar a string de conexão, utilize o comando:
+ ```
+ bash dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=nomedb;Username=username;Password=password"
+ ```
+
+ em que eve substituir `nomedb`, `username` e `password` pelos valores corretos do seu ambiente.
 
 ### Observações importantes sobre o arquivo local
 
-- O arquivo `appsettings.Local.json` está incluído no `.gitignore` e **não é versionado**
+- O arquivo `appsettings.Development.LocalMachine.json` está incluído no `.gitignore` e **não é versionado**
 - Serve exclusivamente para configurações específicas do seu ambiente de desenvolvimento
 - As configurações são carregadas automaticamente pelo ASP.NET Core
-- Você pode sobrescrever qualquer configuração presente no `appsettings.json` ou `appsettings.Development.json`
 
 ## Como Executar
 
@@ -69,7 +75,7 @@ dotnet build
 dotnet run
 ```
 
-4. Acesse a documentação da API em: `https://localhost:5001/swagger`
+4. Acesse a documentação da API em: `https://localhost:7011/swagger`
 
 ## Tecnologias Utilizadas
 
@@ -87,7 +93,7 @@ GestaoPessoas/
 ├── Services/            # Camada de serviços
 ├── Dtos/               # Objetos de transferência de dados
 ├── Program.cs          # Ponto de entrada da aplicação
-└── appsettings.json    # Configurações da aplicação
+└── appsettings.Development.LocalMachine.json    # Configurações da aplicação
 ```
 
 ## Contribuindo
