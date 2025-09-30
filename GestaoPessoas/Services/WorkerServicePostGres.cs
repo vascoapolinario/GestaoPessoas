@@ -48,7 +48,7 @@ namespace GestaoPessoas.Services
             var workers = new List<Worker>();
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date FROM workers", conn);
+            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date FROM workers ORDER BY name", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
