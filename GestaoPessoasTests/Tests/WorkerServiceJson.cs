@@ -1,19 +1,30 @@
-﻿using GestaoPessoas.Services;
+﻿using GestaoPessoas.Dtos;
+using GestaoPessoas.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace GestaoPessoasTests.Tests
 {
     [TestClass]
-    public sealed class WorkerServiceJsonTests : WorkerServiceBase
+    public sealed class WorkerServiceJsonTests : WorkerServiceTestsBase
     {
-        [TestMethod]
-        public void TestMethod1()
+        public WorkerServiceJsonTests()
         {
-            WorkerServiceJsonFile WorkerService;
+            applicationDomain = new TestApplicationDomain();
+            applicationDomain.Services.AddScoped<IWorkerService, WorkerServiceJsonFile>();
+            service = applicationDomain.ServiceProvider.GetRequiredService<IWorkerService>();
+            var configuration = applicationDomain.ServiceProvider.GetRequiredService<IConfiguration>();
+            string? path = configuration.GetValue<string>("JsonWorkerService:FilePath");
+
+            if (path == null) throw new Exception("Não foi possível obter o caminho do ficheiro de configuração.");
+
+            File.Copy("BackupTestesInicial.json", path, true);
         }
     }
 }

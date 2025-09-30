@@ -25,6 +25,22 @@ namespace GestaoPessoas.Dtos
         [Required]
         public DateOnly BirthDate { get; set; }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is not Worker other)
+                return false;
+            return Id == other.Id &&
+                   Name == other.Name &&
+                   JobTitle == other.JobTitle &&
+                   Email == other.Email &&
+                   BirthDate == other.BirthDate;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} ({Id})";
+        }
+
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
             if (BirthDate > DateOnly.FromDateTime(DateTime.Now))

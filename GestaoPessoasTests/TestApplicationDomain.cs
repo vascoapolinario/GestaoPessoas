@@ -8,17 +8,38 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GestaoPessoasTests
 {
-    internal class TestApplicationDomain
+    public class TestApplicationDomain : IDisposable
     {
         private ServiceProvider? serviceProvider = null;
         private readonly ServiceCollection services;
 
-        internal ServiceCollection Services
+        public ServiceCollection Services
         {
             get
             {
                 if (serviceProvider != null) throw new Exception("Uma vez consultado o ServiceProvider já não é possível manipular a coleção de serviços. Se for preciso registar algum serviço faça antes de aceder ao ServiceProvider.");
                 return services;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (serviceProvider != null)
+            {
+                serviceProvider.Dispose();
+                serviceProvider = null;
+            }
+        }
+
+        public ServiceProvider ServiceProvider
+        {
+            get
+            {
+                if (serviceProvider == null)
+                {
+                    serviceProvider = services.BuildServiceProvider();
+                }
+                return serviceProvider;
             }
         }
 
@@ -29,7 +50,8 @@ namespace GestaoPessoasTests
                 .AddUserSecrets<TestApplicationDomain>();
             var configuration = configurationBuilder.Build();
             services = new ServiceCollection();
-            services.AddScoped(f => configuration);
+            services.AddScoped<IConfiguration>(f => configuration);
+            //services.AddScoped(f => configuration);
         }
     }
 }
