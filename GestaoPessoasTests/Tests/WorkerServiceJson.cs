@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace GestaoPessoasTests.Tests
 {
     [TestClass]
+    [DoNotParallelize]
     public sealed class WorkerServiceJsonTests : WorkerServiceTestsBase
     {
         public WorkerServiceJsonTests()

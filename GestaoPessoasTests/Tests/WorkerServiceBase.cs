@@ -10,7 +10,6 @@ namespace GestaoPessoasTests.Tests
 {
     public class WorkerServiceTestsBase : IDisposable
     {
-
         protected TestApplicationDomain? applicationDomain;
         protected IWorkerService? service;
 
@@ -25,9 +24,6 @@ namespace GestaoPessoasTests.Tests
         {
             IEnumerable<Worker> workers = service!.GetAllWorkers();
             Assert.AreEqual(10, workers.Count());
-            //var options = new JsonSerializerOptions { WriteIndented = true };
-            //string json = JsonSerializer.Serialize(workers, options);
-            //File.WriteAllText("C:\\Users\\User\\source\\repos\\GestaoPessoas1\\GestaoPessoasPasta\\GestaoPessoasTests\\Workers.json", json);
         }
 
         [TestMethod]
@@ -35,18 +31,19 @@ namespace GestaoPessoasTests.Tests
         {
             Worker comparisonworker = new Worker
             {
-                Id = 3,
-                Name = "teste",
-                JobTitle = "testing",
-                Email = "email@gmail.com",
-                BirthDate = new DateOnly(2025, 01, 01)
+                Id = 13,
+                Name = "TestUser13",
+                JobTitle = "string",
+                Email = "user@example.com",
+                BirthDate = new DateOnly(2025, 09, 22)
             };
 
-            Worker? realworker = service!.GetWorkerByIdIfExists(3);
+            Worker? realworker = service!.GetWorkerByIdIfExists(comparisonworker.Id);
             Assert.IsNotNull(realworker);
             Assert.AreEqual(comparisonworker, realworker);
         }
 
+        [TestMethod]
         public void TestAddWorker()
         {
             Worker newworker = new Worker
@@ -56,6 +53,35 @@ namespace GestaoPessoasTests.Tests
                 Email = "email@gmail.com",
                 BirthDate = new DateOnly(2025, 01, 01)
             };
+            Worker addedworker = service!.AddWorker(newworker);
+            Assert.IsNotNull(addedworker);
+            newworker.Id = addedworker.Id;
+            Assert.AreEqual(addedworker, newworker);
+        }
+
+        [TestMethod]
+
+        public void TestUpdateWorker()
+        {
+            Worker updatedworker = new Worker
+            {
+                Id = 13,
+                Name = "UpdatedName",
+                JobTitle = "UpdatedJob",
+                Email = "UpdatedEmail@gmail.com",
+                BirthDate = new DateOnly(2024, 01, 01)
+            };
+            Worker? resultworker = service!.UpdateWorker(updatedworker);
+            Assert.AreEqual(updatedworker, resultworker);
+        }
+
+        [TestMethod]
+        public void TestRemoveWorker()
+        {
+            bool result = service!.RemoveWorker(13);
+            Assert.IsTrue(result);
+            Worker? worker = service.GetWorkerByIdIfExists(13);
+            Assert.IsNull(worker);
         }
     }
 }
