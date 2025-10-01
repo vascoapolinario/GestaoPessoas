@@ -14,6 +14,10 @@ builder.Services.AddSwaggerGen(options =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
         options.IncludeXmlComments(xmlPath);
+    else
+    {
+        throw new FileNotFoundException("Ficheiro de comentários XML para documentação swagger não encontrado");
+    }
 });
 
 var app = builder.Build();
