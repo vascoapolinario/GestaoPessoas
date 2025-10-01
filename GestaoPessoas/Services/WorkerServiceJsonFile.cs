@@ -22,12 +22,8 @@ namespace GestaoPessoas.Services
             if (string.IsNullOrWhiteSpace(json))
                 return Enumerable.Empty<Worker>();
 
-            using var doc = JsonDocument.Parse(json);
-            var workers = new List<Worker>();
-
-            workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
-
-            return workers;
+            var workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
+            return workers.OrderBy(worker => worker.Name);
         }
 
         public Worker AddWorker(Worker worker)
