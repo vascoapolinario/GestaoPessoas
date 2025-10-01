@@ -15,7 +15,8 @@ namespace GestaoPessoasTests.Tests
     [DoNotParallelize]
     public sealed class WorkerServiceJsonTests : WorkerServiceTestsBase
     {
-        public WorkerServiceJsonTests()
+        [TestInitialize]
+        public void Initialize()
         {
             applicationDomain = new TestApplicationDomain();
             applicationDomain.Services.AddScoped<IWorkerService, WorkerServiceJsonFile>();

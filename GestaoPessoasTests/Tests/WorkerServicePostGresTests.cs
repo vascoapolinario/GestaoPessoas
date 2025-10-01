@@ -14,9 +14,11 @@ namespace GestaoPessoasTests.Tests
 {
     [TestClass]
     [DoNotParallelize]
-    public sealed class WorkerServicePostGresTests : WorkerServiceTestsBase
+    public sealed class WorkerServicePostGresTests : WorkerServiceTestsBase 
     {
-        public WorkerServicePostGresTests()
+
+        [TestInitialize]
+        public void Initialize()
         {
             applicationDomain = new TestApplicationDomain();
             applicationDomain.Services.AddScoped<IWorkerService, WorkerServicePostGres>();
@@ -30,9 +32,11 @@ namespace GestaoPessoasTests.Tests
             string sql = File.ReadAllText(BackupPath);
 
             using var conn = new NpgsqlConnection(_connectionString);
-            conn.Open();
-            using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.ExecuteNonQuery();
-        }
+            {
+                conn.Open();
+                using var cmd = new NpgsqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
+            }
+        }       
     }
 }

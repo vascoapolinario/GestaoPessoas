@@ -16,21 +16,33 @@ namespace GestaoPessoas.Services
 
         private IEnumerable<Worker> LoadWorkersFromJson()
         {
+            string json;
             lock (_fileLock)
             {
                 if (!File.Exists(filepath))
                     return Enumerable.Empty<Worker>();
 
-                string json = File.ReadAllText(filepath);
-                if (string.IsNullOrWhiteSpace(json))
-                    return Enumerable.Empty<Worker>();
+                json = File.ReadAllText(filepath);
+            }
+            if (string.IsNullOrWhiteSpace(json))
+                return Enumerable.Empty<Worker>();
 
-                var doc = JsonDocument.Parse(json);
-                var workers = new List<Worker>();
+            var doc = JsonDocument.Parse(json);
+            var workers = new List<Worker>();
 
-                workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
+            workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
 
-                return workers;
+            return workers;
+            
+        }
+
+        private void SaveWorkersToJson(IEnumerable<Worker> workers)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(workers, options);
+            lock (_fileLock)
+            {
+                File.WriteAllText(filepath, json);
             }
         }
 
@@ -39,13 +51,8 @@ namespace GestaoPessoas.Services
             var workers = LoadWorkersFromJson()?.ToList() ?? new List<Worker>();
             worker.Id = workers.Count > 0 ? workers.Max(w => w.Id) + 1 : 1;
             workers.Add(worker);
-            lock (_fileLock)
-            {
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                string json = JsonSerializer.Serialize(workers, options);
-                File.WriteAllText(filepath, json);
-                return worker;
-            }
+            SaveWorkersToJson(workers);
+            return worker;
         }
 
         public bool RemoveWorker(int id)
@@ -55,13 +62,8 @@ namespace GestaoPessoas.Services
             if (workerToRemove != null)
             {
                 workers.Remove(workerToRemove);
-                lock (_fileLock)
-                {
-                    var options = new JsonSerializerOptions { WriteIndented = true };
-                    string json = JsonSerializer.Serialize(workers, options);
-                    File.WriteAllText(filepath, json);
-                    return true;
-                }
+                SaveWorkersToJson(workers);
+                return true;
             }
             else
             {
@@ -92,13 +94,8 @@ namespace GestaoPessoas.Services
                 existingWorker.Email = worker.Email;
                 existingWorker.JobTitle = worker.JobTitle;
                 existingWorker.BirthDate = worker.BirthDate;
-                lock (_fileLock)
-                {
-                    var options = new JsonSerializerOptions { WriteIndented = true };
-                    string json = JsonSerializer.Serialize(workers, options);
-                    File.WriteAllText(filepath, json);
-                    return existingWorker;
-                }
+                SaveWorkersToJson(workers);
+                return existingWorker;
             }
             else
             {

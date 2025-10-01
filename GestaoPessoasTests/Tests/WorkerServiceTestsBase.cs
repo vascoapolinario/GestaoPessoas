@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace GestaoPessoasTests.Tests
 {
-    public class WorkerServiceTestsBase : IDisposable
+    public abstract class WorkerServiceTestsBase : IDisposable
     {
         protected TestApplicationDomain? applicationDomain;
         protected IWorkerService? service;
 
-        public void Dispose()
+        [TestCleanup]
+        public void Cleanup()
         {
             applicationDomain?.Dispose();
         }
@@ -44,6 +45,13 @@ namespace GestaoPessoasTests.Tests
         }
 
         [TestMethod]
+        public void TestGetByIdNotFound()
+        {
+            Worker? realworker = service!.GetWorkerByIdIfExists(0);
+            Assert.IsNull(realworker);
+        }
+
+        [TestMethod]
         public void TestAddWorker()
         {
             Worker newworker = new Worker
@@ -54,13 +62,12 @@ namespace GestaoPessoasTests.Tests
                 BirthDate = new DateOnly(2025, 01, 01)
             };
             Worker addedworker = service!.AddWorker(newworker);
+            Assert.AreNotEqual(0, addedworker.Id);
             Assert.IsNotNull(addedworker);
-            newworker.Id = addedworker.Id;
             Assert.AreEqual(addedworker, newworker);
         }
 
         [TestMethod]
-
         public void TestUpdateWorker()
         {
             Worker updatedworker = new Worker
@@ -76,12 +83,40 @@ namespace GestaoPessoasTests.Tests
         }
 
         [TestMethod]
+        public void TestUpdateWorkerNotFound()
+        {
+            Worker updatedworker = new Worker
+            {
+                Id = 0,
+                Name = "UpdatedName",
+                JobTitle = "UpdatedJob",
+                Email = "UpdatedEmail@gmail.com",
+                BirthDate = new DateOnly(2024, 01, 01)
+            };
+            Worker? resultworker = service!.UpdateWorker(updatedworker);
+            Assert.IsNull(resultworker);
+        }
+
+        [TestMethod]
         public void TestRemoveWorker()
         {
             bool result = service!.RemoveWorker(13);
             Assert.IsTrue(result);
             Worker? worker = service.GetWorkerByIdIfExists(13);
             Assert.IsNull(worker);
+        }
+
+        [TestMethod]
+        public void TestRemoveWorkerNotFound()
+        {
+            Assert.IsTrue(service.GetWorkerByIdIfExists(0) == null);
+            bool result = service!.RemoveWorker(0);
+            Assert.IsFalse(result);
+        }
+
+        public void Dispose()
+        {
+            Cleanup();
         }
     }
 }
