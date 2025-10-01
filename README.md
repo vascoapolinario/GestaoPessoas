@@ -52,7 +52,7 @@ Para personalizar as configurações apenas no seu ambiente de desenvolvimento, 
 4. (Opcional): Em caso de uso de PostgreSQL, é necessario adicionar a string de conexão que pode ser configurada como user secrets:
    Para adicionar a string de conexão, utilize o comando:
  ```
- bash dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=nomedb;Username=username;Password=password"
+ dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=nomedb;Username=username;Password=password"
  ```
 
  em que eve substituir `nomedb`, `username` e `password` pelos valores corretos do seu ambiente.
@@ -69,7 +69,7 @@ Para personalizar as configurações apenas no seu ambiente de desenvolvimento, 
 2. Navegue até a pasta do projeto
 3. Execute os comandos:
 
-```bash
+```
 dotnet restore
 dotnet build
 dotnet run
