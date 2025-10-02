@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 13,
+    "Name": "TestUser13",
+    "JobTitle": "string",
+    "Email": "user@example.com",
+    "BirthDate": "2025-09-22"
+  },
+  {
+    "Id": 3,
+    "Name": "teste",
+    "JobTitle": "testing",
+    "Email": "email@gmail.com",
+    "BirthDate": "2025-01-01"
+  },
+  {
+    "Id": 14,
+    "Name": "Vasco Jacinto Apolinario",
+    "JobTitle": "testing",
+    "Email": "vascoapolinario@gmail.com",
+    "BirthDate": "2004-12-22"
+  },
+  {
+    "Id": 5,
+    "Name": "string",
+    "JobTitle": "string",
+    "Email": "user@example.com",
+    "BirthDate": "2025-09-24"
+  },
+  {
+    "Id": 22,
+    "Name": "testresponsecode",
+    "JobTitle": "responsecode",
+    "Email": "response@gmail.com",
+    "BirthDate": "2025-09-24"
+  },
+  {
+    "Id": 24,
+    "Name": "testerproo",
+    "JobTitle": "testerproo",
+    "Email": "tester@gmail.com",
+    "BirthDate": "2025-01-01"
+  },
+  {
+    "Id": 25,
+    "Name": "Vasco Apolin\u00E1rio",
+    "JobTitle": "testjob",
+    "Email": "vascoapolinario@gmail.com",
+    "BirthDate": "2004-12-22"
+  },
+  {
+    "Id": 26,
+    "Name": "A",
+    "JobTitle": "string",
+    "Email": "user@example.com",
+    "BirthDate": "2025-09-30"
+  },
+  {
+    "Id": 27,
+    "Name": "B",
+    "JobTitle": "string",
+    "Email": "user@example.com",
+    "BirthDate": "2025-09-30"
+  },
+  {
+    "Id": 28,
+    "Name": "C",
+    "JobTitle": "string",
+    "Email": "user@example.com",
+    "BirthDate": "2025-09-30"
+  }
+]
