@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen(options =>
         options.IncludeXmlComments(xmlPath);
     else
     {
-        throw new FileNotFoundException("Ficheiro de coment·rios XML para documentaÁ„o swagger n„o encontrado");
+        throw new FileNotFoundException("Ficheiro de coment√°rios XML para documenta√ß√£o swagger n√£o encontrado");
     }
 });
 
