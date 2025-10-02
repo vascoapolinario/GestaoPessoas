@@ -26,6 +26,7 @@ namespace GestaoPessoasTests.Tests
 
             var configuration = applicationDomain.ServiceProvider.GetRequiredService<IConfiguration>();
             string? _connectionString = configuration.GetConnectionString("DefaultConnection");
+            if (_connectionString == null) Assert.Inconclusive("Não foi possível obter a connection string de configuração.");
             string? BackupPath = configuration.GetValue<string>("PostGresWorkerService:FilePath");
             if (BackupPath == null) throw new Exception("Não foi possível obter o caminho do ficheiro de configuração.");
 
