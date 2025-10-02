@@ -39,6 +39,7 @@ namespace GestaoPessoas.Services
                 conn.Open();
                 int? id = (int?)cmd.ExecuteScalar();
                 if (id == null) throw new Exception("Failed to add the new worker");
+                worker.Id = id.Value;
                 return GetWorkerByIdIfExists(id.Value);
             }
         }
