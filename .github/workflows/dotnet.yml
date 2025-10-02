@@ -2,9 +2,9 @@ name: .NET CI
 
 on:
   push:
-    branches: [ "*" ]   # run on all branches (good for testing)
+    branches: [ "*" ]   
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ]  
 
 jobs:
   build-and-test:
@@ -25,4 +25,4 @@ jobs:
       run: dotnet build GestaoPessoas.sln --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test GestaoPessoas.sln --no-build --verbosity normal
+      run: dotnet test GestaoPessoasTests/GestaoPessoasTests.csproj --no-build --verbosity normal
