@@ -5,23 +5,38 @@ namespace GestaoPessoas.Dtos
 {
     public class Worker : IValidatableObject
     {
-
+        /// <summary>
+        /// Identificador do trabalhador nos dados.
+        /// Atribuido pelo sistema, tipo int, exemplo: 1
+        /// </summary>
         [Required]
         public int Id { get; set; }
 
+        /// <summary>
+        /// Nome do trabalhador, string com maximo de 100 caracteres, exemplo: Alexandre Silva
+        /// </summary>
         [Required]
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Titulo do emprego do trabalhador, string com maximo de 100 caracteres, exemplo: Programador
+        /// </summary>
         [Required]
         [StringLength(100)]
         public string JobTitle { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Email do trabalhador, string com maximo de 100 caracteres, necessita de representar um email, exemplo: example@gmail.com
+        /// </summary>
         [Required]
         [StringLength(100)]
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Data de nascimento do trabalhador. Aceita datas entre 150 anos atrás e a data atual.
+        /// </summary>
         [Required]
         public DateOnly BirthDate { get; set; }
 

@@ -28,9 +28,9 @@ namespace GestaoPessoas.Services
                 return Enumerable.Empty<Worker>();
 
             var doc = JsonDocument.Parse(json);
-            var workers = new List<Worker>();
 
-            workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
+            var workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
+            return workers.OrderBy(worker => worker.Name);
 
             return workers;
             
