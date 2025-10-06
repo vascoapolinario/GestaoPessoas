@@ -1,6 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json;
+﻿using GestaoPessoas.Converters;
 using GestaoPessoas.Dtos;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace GestaoPessoas.Services
 {
@@ -29,16 +30,17 @@ namespace GestaoPessoas.Services
 
             var doc = JsonDocument.Parse(json);
 
-            var workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
-            return workers.OrderBy(worker => worker.Name);
+            var options = new JsonSerializerOptions { };
+            options.Converters.Add(new TimeZoneInfoJsonConverter());
 
-            return workers;
-            
+            var workers = JsonSerializer.Deserialize<List<Worker>>(json, options) ?? new List<Worker>();
+            return workers.OrderBy(worker => worker.Name);  
         }
 
         private void SaveWorkersToJson(IEnumerable<Worker> workers)
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
+            options.Converters.Add(new TimeZoneInfoJsonConverter());
             string json = JsonSerializer.Serialize(workers, options);
             lock (_fileLock)
             {
@@ -94,6 +96,7 @@ namespace GestaoPessoas.Services
                 existingWorker.Email = worker.Email;
                 existingWorker.JobTitle = worker.JobTitle;
                 existingWorker.BirthDate = worker.BirthDate;
+                existingWorker.TimeZone = worker.TimeZone;
                 SaveWorkersToJson(workers);
                 return existingWorker;
             }

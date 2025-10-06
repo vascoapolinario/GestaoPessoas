@@ -36,7 +36,8 @@ namespace GestaoPessoasTests.Tests
                 Name = "TestUser13",
                 JobTitle = "string",
                 Email = "user@example.com",
-                BirthDate = new DateOnly(2025, 09, 22)
+                BirthDate = new DateOnly(2025, 09, 22),
+                TimeZone = TimeZoneInfo.Utc
             };
 
             Worker? realworker = service!.GetWorkerByIdIfExists(comparisonworker.Id);
@@ -59,7 +60,8 @@ namespace GestaoPessoasTests.Tests
                 Name = "new worker",
                 JobTitle = "new job",
                 Email = "email@gmail.com",
-                BirthDate = new DateOnly(2025, 01, 01)
+                BirthDate = new DateOnly(2025, 01, 01),
+                TimeZone = TimeZoneInfo.Utc
             };
             Worker addedworker = service!.AddWorker(newworker);
             Assert.AreNotEqual(0, addedworker.Id);
@@ -76,8 +78,11 @@ namespace GestaoPessoasTests.Tests
                 Name = "UpdatedName",
                 JobTitle = "UpdatedJob",
                 Email = "UpdatedEmail@gmail.com",
-                BirthDate = new DateOnly(2024, 01, 01)
+                BirthDate = new DateOnly(2024, 01, 01),
+                TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time")
             };
+            Worker? realworker = service!.GetWorkerByIdIfExists(updatedworker.Id);
+            Assert.AreNotEqual(updatedworker, realworker);
             Worker? resultworker = service!.UpdateWorker(updatedworker);
             Assert.AreEqual(updatedworker, resultworker);
         }
@@ -91,7 +96,8 @@ namespace GestaoPessoasTests.Tests
                 Name = "UpdatedName",
                 JobTitle = "UpdatedJob",
                 Email = "UpdatedEmail@gmail.com",
-                BirthDate = new DateOnly(2024, 01, 01)
+                BirthDate = new DateOnly(2024, 01, 01),
+                TimeZone = TimeZoneInfo.Utc
             };
             Worker? resultworker = service!.UpdateWorker(updatedworker);
             Assert.IsNull(resultworker);

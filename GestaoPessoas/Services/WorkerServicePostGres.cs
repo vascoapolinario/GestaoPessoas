@@ -22,7 +22,10 @@ namespace GestaoPessoas.Services
                 Name = datareader.GetString(datareader.GetOrdinal("name")),
                 JobTitle = datareader.GetString(datareader.GetOrdinal("job_title")),
                 Email = datareader.GetString(datareader.GetOrdinal("email")),
-                BirthDate = DateOnly.FromDateTime(datareader.GetDateTime(datareader.GetOrdinal("birth_date")))
+                BirthDate = DateOnly.FromDateTime(datareader.GetDateTime(datareader.GetOrdinal("birth_date"))),
+                TimeZone = TimeZoneInfo.FindSystemTimeZoneById(
+                    datareader.GetString(datareader.GetOrdinal("time_zone"))
+                )
             };
         }
 
@@ -31,11 +34,12 @@ namespace GestaoPessoas.Services
 
             using (var conn = new NpgsqlConnection(_connectionString))
             {
-                using var cmd = new NpgsqlCommand($"INSERT INTO workers (name, job_title, email, birth_date) VALUES (@name, @job_title, @email, @birth_date) RETURNING id", conn);
+                using var cmd = new NpgsqlCommand($"INSERT INTO workers (name, job_title, email, birth_date, time_zone) VALUES (@name, @job_title, @email, @birth_date, @time_zone) RETURNING id", conn);
                 cmd.Parameters.AddWithValue("name", worker.Name);
                 cmd.Parameters.AddWithValue("job_title", worker.JobTitle);
                 cmd.Parameters.AddWithValue("email", worker.Email);
                 cmd.Parameters.AddWithValue("birth_date", worker.BirthDate.ToDateTime(new TimeOnly(0, 0)));
+                cmd.Parameters.AddWithValue("time_zone", worker.TimeZone.Id);
                 conn.Open();
                 int? id = (int?)cmd.ExecuteScalar();
                 if (id == null) throw new Exception("Failed to add the new worker");
@@ -49,7 +53,7 @@ namespace GestaoPessoas.Services
             var workers = new List<Worker>();
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date FROM workers ORDER BY name", conn);
+            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date, time_zone FROM workers ORDER BY name", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -62,7 +66,7 @@ namespace GestaoPessoas.Services
         {
             using var conn = new NpgsqlConnection(_connectionString);
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date FROM workers WHERE id = @id", conn);
+            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date, time_zone FROM workers WHERE id = @id", conn);
             cmd.Parameters.AddWithValue("id", id);
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
@@ -99,13 +103,14 @@ namespace GestaoPessoas.Services
             conn.Open();
             using var transaction = conn.BeginTransaction();
             using var cmd = new NpgsqlCommand(
-                "UPDATE workers SET name = @name, job_title = @job_title, email = @email, birth_date = @birth_date WHERE id = @id", 
+                "UPDATE workers SET name = @name, job_title = @job_title, email = @email, birth_date = @birth_date, time_zone = @time_zone WHERE id = @id", 
                 conn, transaction);
             cmd.Parameters.AddWithValue("id", worker.Id);
             cmd.Parameters.AddWithValue("name", worker.Name);
             cmd.Parameters.AddWithValue("job_title", worker.JobTitle);
             cmd.Parameters.AddWithValue("email", worker.Email);
             cmd.Parameters.AddWithValue("birth_date", worker.BirthDate.ToDateTime(new TimeOnly(0, 0)));
+            cmd.Parameters.AddWithValue("time_zone", worker.TimeZone.Id);
             int affectedRows = cmd.ExecuteNonQuery();
             if (affectedRows > 1)
             {
