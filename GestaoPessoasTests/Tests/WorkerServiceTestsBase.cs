@@ -79,7 +79,7 @@ namespace GestaoPessoasTests.Tests
                 JobTitle = "UpdatedJob",
                 Email = "UpdatedEmail@gmail.com",
                 BirthDate = new DateOnly(2024, 01, 01),
-                TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time")
+                TimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles")
             };
             Worker? realworker = service!.GetWorkerByIdIfExists(updatedworker.Id);
             Assert.AreNotEqual(updatedworker, realworker);

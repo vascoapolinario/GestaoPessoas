@@ -9,6 +9,11 @@ namespace GestaoPessoas.Services
     {
         private string filepath;
         private static readonly object _fileLock = new object();
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Converters = { new TimeZoneInfoJsonConverter() }
+        };
 
         public WorkerServiceJsonFile(IConfiguration configuration)
         {
@@ -30,18 +35,13 @@ namespace GestaoPessoas.Services
 
             var doc = JsonDocument.Parse(json);
 
-            var options = new JsonSerializerOptions { };
-            options.Converters.Add(new TimeZoneInfoJsonConverter());
-
-            var workers = JsonSerializer.Deserialize<List<Worker>>(json, options) ?? new List<Worker>();
+            var workers = JsonSerializer.Deserialize<List<Worker>>(json, _jsonOptions) ?? new List<Worker>();
             return workers.OrderBy(worker => worker.Name);  
         }
 
         private void SaveWorkersToJson(IEnumerable<Worker> workers)
         {
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            options.Converters.Add(new TimeZoneInfoJsonConverter());
-            string json = JsonSerializer.Serialize(workers, options);
+            string json = JsonSerializer.Serialize(workers, _jsonOptions);
             lock (_fileLock)
             {
                 File.WriteAllText(filepath, json);

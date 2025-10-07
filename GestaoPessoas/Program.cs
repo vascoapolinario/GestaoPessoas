@@ -1,3 +1,4 @@
+using GestaoPessoas.Documentacao.OpenApi;
 using GestaoPessoas.Services;
 using System.Reflection;
 
@@ -39,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
         throw new FileNotFoundException("Ficheiro de comentários XML para documentação swagger não encontrado");
     }
 
-    options.SchemaFilter<GestaoPessoas.Converters.TimeZoneInfoSchemaFilter>();
+    options.SchemaFilter<TimeZoneInfoSchemaFilter>();
 });
 
 var app = builder.Build();

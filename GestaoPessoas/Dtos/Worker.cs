@@ -1,3 +1,4 @@
+using GestaoPessoas.Validators;
 using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
 
@@ -44,6 +45,7 @@ namespace GestaoPessoas.Dtos
         /// Timezone do trabalhador. Necessita de ser um timezone válido. Por omissão é UTC.
         /// </summary>
         [Required]
+        [DataAnnotation]
         public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.Utc;
 
         public override bool Equals(object? obj)
@@ -76,14 +78,6 @@ namespace GestaoPessoas.Dtos
                 yield return new ValidationResult(
                     "BirthDate is not realistic.",
                     new[] { nameof(BirthDate) });
-            }
-
-            var validTimeZones = TimeZoneInfo.GetSystemTimeZones();
-            if (!validTimeZones.Any(timezone => timezone.Id == TimeZone.Id))
-            {
-                yield return new ValidationResult(
-                    "TimeZone is not valid.",
-                    new[] { nameof(TimeZone) });
             }
         }
     }

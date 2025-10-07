@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using TimeZoneConverter;
 
 namespace GestaoPessoas.Converters
 {
@@ -10,19 +11,15 @@ namespace GestaoPessoas.Converters
         {
             var timeZoneId = reader.GetString();
             if (string.IsNullOrWhiteSpace(timeZoneId))
-                return TimeZoneInfo.Utc;
-            try
+                return null;
+
+            if (TZConvert.KnownIanaTimeZoneNames.Contains(timeZoneId))
             {
                 return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
             }
-            catch (TimeZoneNotFoundException)
+            else
             {
-                return TimeZoneInfo.CreateCustomTimeZone(
-                    id: "__INVALID__",
-                    baseUtcOffset: TimeSpan.Zero,
-                    displayName: "Invalid TimeZone",
-                    standardDisplayName: "Invalid TimeZone"
-                );
+                throw new JsonException($"TimeZone '{timeZoneId}' not found.");
             }
         }
 
