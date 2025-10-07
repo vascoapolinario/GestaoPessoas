@@ -25,4 +25,4 @@ jobs:
       run: dotnet build GestaoPessoas.sln --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test GestaoPessoasTests/GestaoPessoasTests.csproj --no-build --verbosity normal
+      run: dotnet test GestaoPessoasTests/GestaoPessoasTests.csproj --verbosity normal
