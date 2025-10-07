@@ -1,3 +1,4 @@
+using GestaoPessoas.Middlewares;
 using GestaoPessoas.Services;
 using System.Reflection;
 
@@ -44,6 +45,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseApplicationInformation();
 
 app.UseHttpsRedirection();
 
