@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+WORKDIR /src
+
+COPY GestaoPessoas.sln ./
+COPY GestaoPessoas/GestaoPessoas.csproj GestaoPessoas/
+COPY GestaoPessoasTests/GestaoPessoasTests.csproj GestaoPessoasTests/
+
+RUN dotnet restore GestaoPessoas.sln
+
+COPY . .
+
+
+CMD dotnet test GestaoPessoasTests/GestaoPessoasTests.csproj --configuration Release --verbosity normal
