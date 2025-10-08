@@ -45,7 +45,7 @@ namespace GestaoPessoas.Dtos
         /// Timezone do trabalhador. Necessita de ser um timezone válido. Por omissão é UTC.
         /// </summary>
         [Required]
-        [DataAnnotation]
+        [IanaTimeZone]
         public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.Utc;
 
         public override bool Equals(object? obj)

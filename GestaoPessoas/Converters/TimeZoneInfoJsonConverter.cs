@@ -9,17 +9,24 @@ namespace GestaoPessoas.Converters
     {
         public override TimeZoneInfo? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var timeZoneId = reader.GetString();
-            if (string.IsNullOrWhiteSpace(timeZoneId))
-                return null;
+            try
+            {
+                var timeZoneId = reader.GetString();
+                if (string.IsNullOrWhiteSpace(timeZoneId))
+                    return null;
 
-            if (TZConvert.KnownIanaTimeZoneNames.Contains(timeZoneId))
-            {
-                return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+                if (TZConvert.KnownIanaTimeZoneNames.Contains(timeZoneId))
+                {
+                    return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+                }
+                else
+                {
+                    throw new JsonException($"TimeZone '{timeZoneId}' not found.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new JsonException($"TimeZone '{timeZoneId}' not found.");
+                throw new JsonException("Error processing TimeZoneInfo\n", ex);
             }
         }
 

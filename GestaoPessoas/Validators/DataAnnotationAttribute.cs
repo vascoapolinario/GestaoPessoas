@@ -3,20 +3,22 @@ using TimeZoneConverter;
 
 namespace GestaoPessoas.Validators
 {
-    internal class DataAnnotationAttribute : ValidationAttribute
+    public class IanaTimeZoneAttribute : ValidationAttribute
     {
-        public DataAnnotationAttribute()
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
-            ErrorMessage = "O timezone especificado não é válido.";
-        }
-
-        public override bool IsValid(object? value)
-        {
-            if (value == null)
-                return false;
-            else if (value is TimeZoneInfo timeZone && TZConvert.KnownIanaTimeZoneNames.Contains(timeZone.Id))
-                return true;
-            return false;
+            try
+            {
+                if (value == null)
+                    return ValidationResult.Success!;
+                else if (value is TimeZoneInfo timeZone && TZConvert.KnownIanaTimeZoneNames.Contains(timeZone.Id))
+                    return ValidationResult.Success!;
+                return new ValidationResult("A propriedade timezone não é uma timezone válida de formatação Iana");
+            }
+            catch (Exception ex)
+            {
+                return new ValidationResult($"Erro ao validar a propriedade timezone: {ex.Message}");
+            }
         }
     }
 }
