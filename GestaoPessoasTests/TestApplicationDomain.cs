@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GestaoPessoas.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GestaoPessoasTests
 {
@@ -51,6 +52,7 @@ namespace GestaoPessoasTests
             var configuration = configurationBuilder.Build();
             services = new ServiceCollection();
             services.AddScoped<IConfiguration>(f => configuration);
+            Services.AddScoped<ICryptoService, AesCryptoService>();
             //services.AddScoped(f => configuration);
         }
     }

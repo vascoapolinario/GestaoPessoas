@@ -3,11 +3,11 @@ using System.Text;
 
 namespace GestaoPessoas.Services
 {
-    public class CryptoService : ICryptoService
+    public class AesCryptoService : ICryptoService
     {
         private readonly string _key;
         private readonly string _salt;
-        public CryptoService(IConfiguration configuration)
+        public AesCryptoService(IConfiguration configuration)
         {
             string? key = configuration["Crypto:Key"];
             string? salt = configuration["Crypto:Salt"];

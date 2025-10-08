@@ -11,7 +11,7 @@ namespace GestaoPessoasTests.Tests
 {
     [TestClass]
     [DoNotParallelize]
-    public class CryptoServiceTests
+    public class AesCryptoServiceTests
     {
         private TestApplicationDomain? applicationDomain;
         private ICryptoService? service;
@@ -20,9 +20,7 @@ namespace GestaoPessoasTests.Tests
         public void Initialize()
         {
             applicationDomain = new TestApplicationDomain();
-            applicationDomain.Services.AddScoped<ICryptoService, CryptoService>();
             service = applicationDomain.ServiceProvider.GetRequiredService<ICryptoService>();
-
             var configuration = applicationDomain.ServiceProvider.GetRequiredService<IConfiguration>();
         }
 
