@@ -1,4 +1,5 @@
 using GestaoPessoas.Documentacao.OpenApi;
+using GestaoPessoas.Middlewares;
 using GestaoPessoas.Services;
 using System.Reflection;
 
