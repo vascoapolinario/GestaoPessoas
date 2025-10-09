@@ -4,69 +4,79 @@
     "Name": "TestUser13",
     "JobTitle": "string",
     "Email": "user@example.com",
-    "BirthDate": "2025-09-22"
+    "BirthDate": "2025-09-22",
+    "TimeZone": "UTC"
   },
   {
     "Id": 3,
     "Name": "teste",
     "JobTitle": "testing",
     "Email": "email@gmail.com",
-    "BirthDate": "2025-01-01"
+    "BirthDate": "2025-01-01",
+    "TimeZone": "UTC"
   },
   {
     "Id": 14,
     "Name": "Vasco Jacinto Apolinario",
     "JobTitle": "testing",
     "Email": "vascoapolinario@gmail.com",
-    "BirthDate": "2004-12-22"
+    "BirthDate": "2004-12-22",
+    "TimeZone": "UTC"
   },
   {
     "Id": 5,
     "Name": "string",
     "JobTitle": "string",
     "Email": "user@example.com",
-    "BirthDate": "2025-09-24"
+    "BirthDate": "2025-09-24",
+    "time_zone": "UTC"
   },
   {
     "Id": 22,
     "Name": "testresponsecode",
     "JobTitle": "responsecode",
     "Email": "response@gmail.com",
-    "BirthDate": "2025-09-24"
+    "BirthDate": "2025-09-24",
+    "TimeZone": "UTC"
   },
   {
     "Id": 24,
     "Name": "testerproo",
     "JobTitle": "testerproo",
     "Email": "tester@gmail.com",
-    "BirthDate": "2025-01-01"
+    "BirthDate": "2025-01-01",
+    "TimeZone": "UTC"
   },
   {
     "Id": 25,
     "Name": "Vasco Apolin\u00E1rio",
     "JobTitle": "testjob",
     "Email": "vascoapolinario@gmail.com",
-    "BirthDate": "2004-12-22"
+    "BirthDate": "2004-12-22",
+    "TimeZone": "UTC"
   },
   {
     "Id": 26,
     "Name": "A",
     "JobTitle": "string",
     "Email": "user@example.com",
-    "BirthDate": "2025-09-30"
+    "BirthDate": "2025-09-30",
+    "TimeZone": "UTC"
   },
   {
     "Id": 27,
     "Name": "B",
     "JobTitle": "string",
     "Email": "user@example.com",
-    "BirthDate": "2025-09-30"
+    "BirthDate": "2025-09-30",
+    "TimeZone": "UTC"
   },
   {
     "Id": 28,
     "Name": "C",
     "JobTitle": "string",
     "Email": "user@example.com",
-    "BirthDate": "2025-09-30"
+    "BirthDate": "2025-09-30",
+    "TimeZone": "UTC"
   }
 ]

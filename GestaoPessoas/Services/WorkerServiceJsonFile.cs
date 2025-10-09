@@ -1,6 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json;
+﻿using GestaoPessoas.Converters;
 using GestaoPessoas.Dtos;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace GestaoPessoas.Services
 {
@@ -8,6 +9,11 @@ namespace GestaoPessoas.Services
     {
         private string filepath;
         private static readonly object _fileLock = new object();
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Converters = { new TimeZoneInfoJsonConverter() }
+        };
 
         public WorkerServiceJsonFile(IConfiguration configuration)
         {
@@ -29,17 +35,13 @@ namespace GestaoPessoas.Services
 
             var doc = JsonDocument.Parse(json);
 
-            var workers = JsonSerializer.Deserialize<List<Worker>>(json) ?? new List<Worker>();
-            return workers.OrderBy(worker => worker.Name);
-
-            return workers;
-            
+            var workers = JsonSerializer.Deserialize<List<Worker>>(json, _jsonOptions) ?? new List<Worker>();
+            return workers.OrderBy(worker => worker.Name);  
         }
 
         private void SaveWorkersToJson(IEnumerable<Worker> workers)
         {
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string json = JsonSerializer.Serialize(workers, options);
+            string json = JsonSerializer.Serialize(workers, _jsonOptions);
             lock (_fileLock)
             {
                 File.WriteAllText(filepath, json);
@@ -94,6 +96,7 @@ namespace GestaoPessoas.Services
                 existingWorker.Email = worker.Email;
                 existingWorker.JobTitle = worker.JobTitle;
                 existingWorker.BirthDate = worker.BirthDate;
+                existingWorker.TimeZone = worker.TimeZone;
                 SaveWorkersToJson(workers);
                 return existingWorker;
             }

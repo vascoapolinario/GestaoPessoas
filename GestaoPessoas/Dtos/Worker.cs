@@ -1,3 +1,4 @@
+using GestaoPessoas.Validators;
 using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
 
@@ -40,6 +41,13 @@ namespace GestaoPessoas.Dtos
         [Required]
         public DateOnly BirthDate { get; set; }
 
+        /// <summary>
+        /// Timezone do trabalhador. Necessita de ser um timezone válido. Por omissão é UTC.
+        /// </summary>
+        [Required]
+        [IanaTimeZone]
+        public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.Utc;
+
         public override bool Equals(object? obj)
         {
             if (obj is not Worker other)
@@ -48,7 +56,8 @@ namespace GestaoPessoas.Dtos
                    Name == other.Name &&
                    JobTitle == other.JobTitle &&
                    Email == other.Email &&
-                   BirthDate == other.BirthDate;
+                   BirthDate == other.BirthDate &&
+                   TimeZone.Id == other.TimeZone.Id;
         }
 
         public override string ToString()

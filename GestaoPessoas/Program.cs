@@ -1,3 +1,4 @@
+using GestaoPessoas.Documentacao.OpenApi;
 using GestaoPessoas.Middlewares;
 using GestaoPessoas.Services;
 using System.Reflection;
@@ -23,6 +24,10 @@ switch (Implementation)
         throw new NotSupportedException($"Implementation '{Implementation}' for '{nameof(IWorkerService)}' is not supported.");
 }
 builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new GestaoPessoas.Converters.TimeZoneInfoJsonConverter());
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -35,6 +40,8 @@ builder.Services.AddSwaggerGen(options =>
     {
         throw new FileNotFoundException("Ficheiro de comentários XML para documentação swagger não encontrado");
     }
+
+    options.SchemaFilter<TimeZoneInfoSchemaFilter>();
 });
 
 var app = builder.Build();
