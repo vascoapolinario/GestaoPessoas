@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS workers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    job_title VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    birth_date DATE NOT NULL
+);

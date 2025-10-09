@@ -2,6 +2,8 @@
 
 Uma aplicação .NET desenvolvida para fins de aprendizado sobre a arquitetura .NET.
 
+Disponível em: [https://gestaopessoas.onrender.com/swagger/index.html](https://gestaopessoas.onrender.com/swagger/index.html) para testar
+
 ## Sobre o Projeto
 
 O **GestaoPessoas** é uma aplicação simples para gerenciamento de colaboradores, criada com o objetivo de estudar e aplicar conceitos fundamentais de desenvolvimento em .NET, incluindo:
@@ -36,6 +38,7 @@ Para personalizar as configurações apenas no seu ambiente de desenvolvimento, 
 
 1. Na raiz do projeto `GestaoPessoas`, crie um arquivo chamado `appsettings.Development.LocalMachine.json`.
 2. Insira as configurações que deseja sobrescrever apenas no seu ambiente, por exemplo:
+Para utilizar json como implementação:
 
 ```json
 {
@@ -49,21 +52,33 @@ Para personalizar as configurações apenas no seu ambiente de desenvolvimento, 
 ```
 
 3. Ao iniciar a aplicação, as configurações do arquivo local serão carregadas automaticamente.
-4. (Opcional): Em caso de uso de PostgreSQL, é necessario adicionar a string de conexão que pode ser configurada como user secrets:
-   Para adicionar a string de conexão, utilize o comando:
+4. (Opcional):  É possivel definir user-secrets para armazenar informações sensíveis, como strings de conexão. Por exemplo, para definir a string de conexão do PostgreSQL, você pode usar o comando:
  ```
  dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=nomedb;Username=username;Password=password"
  ```
+ Tambem pode definir a connection string no arquivo local: `appsettings.Development.LocalMachine.json`: 
+ ```json
+ {
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=nomedb;Username=username;Password=password"
+  }
+ ```
+ em que deve substituir `nomedb`, `username` e `password` pelos valores corretos do seu ambiente.
 
- em que eve substituir `nomedb`, `username` e `password` pelos valores corretos do seu ambiente.
+ Em caso de utilização docker, a connection string definida em appsettings corresponde à base de dados do container postgres definido no docker-compose.yml mas tambem pode ser sobrescrita localmente.
+
 
 ### Observações importantes sobre o arquivo local
 
 - O arquivo `appsettings.Development.LocalMachine.json` está incluído no `.gitignore` e **não é versionado**
 - Serve exclusivamente para configurações específicas do seu ambiente de desenvolvimento
 - As configurações são carregadas automaticamente pelo ASP.NET Core
+- Tambem é possivel configurar variaveis de ambiente para sobrescrever as configurações
+- É possivel configurar sem utilizar o arquivo local, editando diretamente o `appsettings.json`
 
-## Como Executar
+## Como Executar Localmente
+
+**Sem docker:**
 
 1. Clone o repositório
 2. Navegue até a pasta do projeto
@@ -77,6 +92,16 @@ dotnet run
 
 4. Acesse a documentação da API em: `https://localhost:7011/swagger`
 
+**Com Docker:**
+
+1. Clone o repositório
+2. Navegue até a pasta do repositório
+3. Execute o comando:
+```
+docker-compose up --build
+```
+4. Acesse a documentação da API em: `http://localhost:8080/swagger`
+
 ## Tecnologias Utilizadas
 
 - .NET 8
@@ -84,6 +109,8 @@ dotnet run
 - System.Text.Json (para serialização JSON)
 - Npgsql (para PostgreSQL)
 - Swagger/OpenAPI
+- Docker (opcional)
+- Render.com (hospedagem gratuita para o backend)
 
 ## Estrutura do Projeto
 
