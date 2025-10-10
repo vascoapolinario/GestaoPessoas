@@ -12,7 +12,7 @@ string? Implementation = builder.Configuration.GetValue<string>("WorkerService:I
 if (string.IsNullOrEmpty(Implementation))
     throw new InvalidOperationException("WorkerService:Implementation is not configured.");
 Implementation = Implementation.ToLower();
-builder.Services.AddScoped<ICryptoService, AesCryptoService>();
+builder.Services.AddSingleton<ICryptoService, AesCryptoService>();
 switch (Implementation)
 {
     case "postgres":
