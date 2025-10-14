@@ -13,6 +13,10 @@ services:
     depends_on:
       - db
     profiles: ["test"]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=workerdb;Username=postgres;Password=password
+
 
   db:
     image: postgres:16

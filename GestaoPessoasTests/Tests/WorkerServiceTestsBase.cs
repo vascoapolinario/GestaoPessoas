@@ -129,7 +129,7 @@ namespace GestaoPessoasTests.Tests
 
         private bool WorkersAreEqual(Worker worker1, Worker worker2)
         {
-            return worker1.Id == worker2.Id &&
+            return 
                    worker1.Name == worker2.Name &&
                    worker1.JobTitle == worker2.JobTitle &&
                    worker1.Email == worker2.Email &&

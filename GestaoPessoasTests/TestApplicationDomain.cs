@@ -13,6 +13,7 @@ namespace GestaoPessoasTests
     {
         private ServiceProvider? serviceProvider = null;
         private readonly ServiceCollection services;
+        public readonly IConfiguration configuration;
 
         public ServiceCollection Services
         {
@@ -51,6 +52,7 @@ namespace GestaoPessoasTests
                 .AddUserSecrets<TestApplicationDomain>();
             var configuration = configurationBuilder.Build();
             services = new ServiceCollection();
+            this.configuration = configuration;
             services.AddScoped<IConfiguration>(f => configuration);
             Services.AddScoped<ICryptoService, AesCryptoService>();
             //services.AddScoped(f => configuration);
