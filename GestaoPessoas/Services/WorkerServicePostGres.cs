@@ -44,7 +44,9 @@ namespace GestaoPessoas.Services
                 int? id = (int?)cmd.ExecuteScalar();
                 if (id == null) throw new Exception("Failed to add the new worker");
                 worker.Id = id.Value;
-                return GetWorkerByIdIfExists(id.Value);
+                Worker? addedWorker = GetWorkerByIdIfExists(id.Value);
+                if (addedWorker == null) throw new Exception("Failed to retrieve the added worker");
+                return addedWorker;
             }
         }
 

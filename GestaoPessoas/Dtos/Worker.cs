@@ -48,18 +48,6 @@ namespace GestaoPessoas.Dtos
         [IanaTimeZone]
         public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.Utc;
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not Worker other)
-                return false;
-            return Id == other.Id &&
-                   Name == other.Name &&
-                   JobTitle == other.JobTitle &&
-                   Email == other.Email &&
-                   BirthDate == other.BirthDate &&
-                   TimeZone.Id == other.TimeZone.Id;
-        }
-
         public override string ToString()
         {
             return $"{Name} ({Id})";
