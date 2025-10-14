@@ -42,7 +42,7 @@ namespace GestaoPessoasTests.Tests
 
             Worker? realworker = service!.GetWorkerByIdIfExists(comparisonworker.Id);
             Assert.IsNotNull(realworker);
-            Assert.AreEqual(comparisonworker, realworker);
+            Assert.IsTrue(WorkersAreEqual(comparisonworker, realworker!));
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace GestaoPessoasTests.Tests
             Worker addedworker = service!.AddWorker(newworker);
             Assert.AreNotEqual(0, addedworker.Id);
             Assert.IsNotNull(addedworker);
-            Assert.AreEqual(addedworker, newworker);
+            Assert.IsTrue(WorkersAreEqual(newworker, addedworker));
         }
 
         [TestMethod]
@@ -82,9 +82,11 @@ namespace GestaoPessoasTests.Tests
                 TimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles")
             };
             Worker? realworker = service!.GetWorkerByIdIfExists(updatedworker.Id);
-            Assert.AreNotEqual(updatedworker, realworker);
+            Assert.IsNotNull(realworker);
+            Assert.IsFalse(WorkersAreEqual(updatedworker, realworker!));
             Worker? resultworker = service!.UpdateWorker(updatedworker);
-            Assert.AreEqual(updatedworker, resultworker);
+            Assert.IsNotNull(resultworker);
+            Assert.IsTrue(WorkersAreEqual(updatedworker, resultworker!));
         }
 
         [TestMethod]
@@ -115,7 +117,7 @@ namespace GestaoPessoasTests.Tests
         [TestMethod]
         public void TestRemoveWorkerNotFound()
         {
-            Assert.IsTrue(service.GetWorkerByIdIfExists(0) == null);
+            Assert.IsTrue(service!.GetWorkerByIdIfExists(0) == null);
             bool result = service!.RemoveWorker(0);
             Assert.IsFalse(result);
         }
@@ -123,6 +125,16 @@ namespace GestaoPessoasTests.Tests
         public void Dispose()
         {
             Cleanup();
+        }
+
+        private bool WorkersAreEqual(Worker worker1, Worker worker2)
+        {
+            return worker1.Id == worker2.Id &&
+                   worker1.Name == worker2.Name &&
+                   worker1.JobTitle == worker2.JobTitle &&
+                   worker1.Email == worker2.Email &&
+                   worker1.BirthDate == worker2.BirthDate &&
+                   worker1.TimeZone.Id == worker2.TimeZone.Id;
         }
     }
 }
