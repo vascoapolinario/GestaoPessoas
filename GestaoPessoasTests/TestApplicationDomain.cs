@@ -49,7 +49,8 @@ namespace GestaoPessoasTests
         {
             var configurationBuilder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddUserSecrets<TestApplicationDomain>();
+                .AddUserSecrets<TestApplicationDomain>()
+                .AddEnvironmentVariables();
             var configuration = configurationBuilder.Build();
             services = new ServiceCollection();
             this.configuration = configuration;
