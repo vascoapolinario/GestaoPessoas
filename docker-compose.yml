@@ -14,8 +14,8 @@ services:
       - db
     profiles: ["test"]
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=workerdb;Username=postgres;Password=password
+      - ASPNETCORE__ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection="Host=db;Port=5432;Database=workerdb;Username=postgres;Password=password"
 
 
   db:
