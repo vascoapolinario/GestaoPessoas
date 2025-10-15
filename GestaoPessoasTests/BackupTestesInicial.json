@@ -1,19 +1,22 @@
 [
-  {
-    "Id": 13,
-    "Name": "TestUser13",
-    "JobTitle": "string",
-    "Email": "user@example.com",
-    "BirthDate": "2025-09-22",
-    "TimeZone": "UTC"
-  },
+    {
+        "Id": 13,
+        "Name": "TestUser13",
+        "JobTitle": "string",
+        "Email": "user@example.com",
+        "BirthDate": "2025-09-22",
+        "TimeZone": "UTC",
+        "PortalDasFinancasUserName": "user13",
+        "PortalDasFinancasUserPassword": "Qr1/U4qQbX/qKTxFdP0Pkw=="
+    },
   {
     "Id": 3,
     "Name": "teste",
     "JobTitle": "testing",
     "Email": "email@gmail.com",
     "BirthDate": "2025-01-01",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "user3"
   },
   {
     "Id": 14,
@@ -21,7 +24,8 @@
     "JobTitle": "testing",
     "Email": "vascoapolinario@gmail.com",
     "BirthDate": "2004-12-22",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "vascoapolinario"
   },
   {
     "Id": 5,
@@ -29,7 +33,8 @@
     "JobTitle": "string",
     "Email": "user@example.com",
     "BirthDate": "2025-09-24",
-    "time_zone": "UTC"
+    "time_zone": "UTC",
+    "PortalDasFinancasUserName": "user5"
   },
   {
     "Id": 22,
@@ -37,7 +42,8 @@
     "JobTitle": "responsecode",
     "Email": "response@gmail.com",
     "BirthDate": "2025-09-24",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "responsecode"
   },
   {
     "Id": 24,
@@ -45,7 +51,8 @@
     "JobTitle": "testerproo",
     "Email": "tester@gmail.com",
     "BirthDate": "2025-01-01",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "testerproo"
   },
   {
     "Id": 25,
@@ -53,7 +60,8 @@
     "JobTitle": "testjob",
     "Email": "vascoapolinario@gmail.com",
     "BirthDate": "2004-12-22",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "vascoapolinario2"
   },
   {
     "Id": 26,
@@ -61,7 +69,8 @@
     "JobTitle": "string",
     "Email": "user@example.com",
     "BirthDate": "2025-09-30",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "userA"
   },
   {
     "Id": 27,
@@ -69,7 +78,8 @@
     "JobTitle": "string",
     "Email": "user@example.com",
     "BirthDate": "2025-09-30",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "userB"
   },
   {
     "Id": 28,
@@ -77,6 +87,7 @@
     "JobTitle": "string",
     "Email": "user@example.com",
     "BirthDate": "2025-09-30",
-    "TimeZone": "UTC"
+    "TimeZone": "UTC",
+    "PortalDasFinancasUserName": "userC"
   }
 ]

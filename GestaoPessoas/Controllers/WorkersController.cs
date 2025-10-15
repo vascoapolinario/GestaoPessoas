@@ -1,8 +1,9 @@
+using DtoEntities = GestaoPessoas.Dtos;
+using GestaoPessoas.Entities;
 using GestaoPessoas.Services;
 using Microsoft.AspNetCore.Mvc;
-using GestaoPessoas.Dtos;
-using System.Threading.Tasks.Dataflow;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks.Dataflow;
 
 namespace GestaoPessoas.Controllers
 {
@@ -27,13 +28,13 @@ namespace GestaoPessoas.Controllers
         /// </summary>
         /// <returns>Lista de trabalhadores</returns>
         [HttpGet(Name = "Workers")]
-        [ProducesResponseType(typeof(IEnumerable<Worker>), StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Worker>> GetWorkers()
+        [ProducesResponseType(typeof(IEnumerable<DtoEntities.Worker>), StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<DtoEntities.Worker>> GetWorkers()
         {
+            IEnumerable<DtoEntities.Worker> workers = WorkerService.GetAllWorkers();
+            var nonSensitiveWorkers = workers.Select(worker => WorkerService.NonSensitiveWorker(worker)).ToList();
 
-                var worker = WorkerService.GetAllWorkers();
-                return Ok(worker);
-
+            return Ok(nonSensitiveWorkers);
         }
 
         /// <summary>
@@ -42,16 +43,16 @@ namespace GestaoPessoas.Controllers
         /// <param name="id">Id do trabalhador.</param>
         /// <returns>O trabalhador caso seja encontrado, caso contrário resposta NotFound</returns>
         [HttpGet("{id}", Name = "Worker")]
-        [ProducesResponseType(typeof(Worker), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DtoEntities.Worker), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Worker> GetWorker(int id)
+        public ActionResult<DtoEntities.Worker> GetWorker(int id)
         {
             var worker = WorkerService.GetWorkerByIdIfExists(id);
             if (worker is null)
             {
                 return NotFound();
             }
-            return Ok(worker);
+            return Ok(WorkerService.NonSensitiveWorker(worker));
         }
 
         /// <summary>
@@ -60,12 +61,14 @@ namespace GestaoPessoas.Controllers
         /// <param name="newworker">O novo trabalhador a adicionar</param>
         /// <returns>O worker e o seu url juntamente com resposta 201 ou 400 caso o pedido contenha dados invalidos</returns>
         [HttpPost(Name = "AddWorker")]
-        [ProducesResponseType(typeof(Worker), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(DtoEntities.Worker), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public ActionResult<Worker> AddWorker([FromBody] Worker newworker)
+        public ActionResult<DtoEntities.Worker> AddWorker([FromBody] DtoEntities.Worker newworker)
         {
-            Worker? createdWorker = WorkerService.AddWorker(newworker);
-            return CreatedAtAction(nameof(GetWorker), new {id = createdWorker.Id}, createdWorker);
+            DtoEntities.Worker createdWorker = WorkerService.AddWorker(newworker);
+            DtoEntities.Worker createdNonSensitiveWorker = WorkerService.NonSensitiveWorker(createdWorker);
+
+            return CreatedAtAction(nameof(GetWorker), new {id = createdNonSensitiveWorker.Id}, createdNonSensitiveWorker);
         }
 
 
@@ -95,10 +98,10 @@ namespace GestaoPessoas.Controllers
         /// <param name="updatedWorker">Trabalhador a atualizar</param>
         /// <returns>Resposta do tipo 200 com o trabalhador se encontrado, 400 caso o pedido contenha dados invalidos ou 404 se o trabalhador não for encontrado.</returns>
         [HttpPut(Name = "UpdateWorker")]
-        [ProducesResponseType(typeof(Worker), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DtoEntities.Worker), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public ActionResult<Worker> UpdateWorker([FromBody] Worker updatedWorker)
+        public ActionResult<DtoEntities.Worker> UpdateWorker([FromBody] DtoEntities.Worker updatedWorker)
         {
 
             var worker = WorkerService.UpdateWorker(updatedWorker);
@@ -107,7 +110,7 @@ namespace GestaoPessoas.Controllers
             {
                 return NotFound($"Worker with ID {updatedWorker.Id} not found.");
             }
-            return Ok(worker);
+            return Ok(WorkerService.NonSensitiveWorker(worker));
         }
     }
 }

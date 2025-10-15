@@ -48,6 +48,14 @@ namespace GestaoPessoas.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("PortalDasFinancasUserName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("PortalDasFinancasUserPassword")
+                        .HasColumnType("text");
+
                     b.Property<string>("TimeZone")
                         .IsRequired()
                         .HasColumnType("text");

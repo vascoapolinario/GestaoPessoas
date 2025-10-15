@@ -48,6 +48,18 @@ namespace GestaoPessoas.Dtos
         [IanaTimeZone]
         public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.Utc;
 
+        /// <summary>
+        /// Username do utilzador no Portal das Finanças, string com maximo de 100 caracteres, exemplo:
+        /// </summary>
+        [Required]
+        [StringLength(100)]
+        public string PortalDasFinancasUserName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Password do utilzador no Portal das Finanças, string.
+        /// </summary>
+        public string PortalDasFinancasUserPassword { get; set; } = string.Empty;
+
         public override string ToString()
         {
             return $"{Name} ({Id})";

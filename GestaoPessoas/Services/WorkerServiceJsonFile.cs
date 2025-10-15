@@ -14,10 +14,12 @@ namespace GestaoPessoas.Services
             WriteIndented = true,
             Converters = { new TimeZoneInfoJsonConverter() }
         };
+        private ICryptoService cryptoService;
 
-        public WorkerServiceJsonFile(IConfiguration configuration)
+        public WorkerServiceJsonFile(IConfiguration configuration, ICryptoService cryptoService)
         {
             filepath = configuration.GetValue<string>("JsonWorkerService:FilePath") ?? "./workers.json";
+            this.cryptoService = cryptoService;
         }
 
         private IEnumerable<Worker> LoadWorkersFromJson()
@@ -36,7 +38,7 @@ namespace GestaoPessoas.Services
             var doc = JsonDocument.Parse(json);
 
             var workers = JsonSerializer.Deserialize<List<Worker>>(json, _jsonOptions) ?? new List<Worker>();
-            return workers.OrderBy(worker => worker.Name);  
+            return workers.OrderBy(worker => worker.Name);
         }
 
         private void SaveWorkersToJson(IEnumerable<Worker> workers)
@@ -52,6 +54,7 @@ namespace GestaoPessoas.Services
         {
             var workers = LoadWorkersFromJson()?.ToList() ?? new List<Worker>();
             worker.Id = workers.Count > 0 ? workers.Max(w => w.Id) + 1 : 1;
+            worker.PortalDasFinancasUserPassword = cryptoService.Encrypt(worker.PortalDasFinancasUserPassword)!;
             workers.Add(worker);
             SaveWorkersToJson(workers);
             return worker;
@@ -76,6 +79,10 @@ namespace GestaoPessoas.Services
         public IEnumerable<Worker> GetAllWorkers()
         {
             IEnumerable<Worker> workers = LoadWorkersFromJson();
+            foreach (var worker in workers) {
+                if (worker.PortalDasFinancasUserPassword != String.Empty)
+                    worker.PortalDasFinancasUserPassword = cryptoService.Decrypt(worker.PortalDasFinancasUserPassword)!;
+            }
             return workers;
         }
 
@@ -83,6 +90,10 @@ namespace GestaoPessoas.Services
         {
             var workers = LoadWorkersFromJson();
             Worker? selected = workers?.FirstOrDefault(w => w.Id == id);
+            if (selected != null && selected.PortalDasFinancasUserPassword != String.Empty)
+            {
+                selected.PortalDasFinancasUserPassword = cryptoService.Decrypt(selected.PortalDasFinancasUserPassword)!;
+            }
             return selected;
         }
 
@@ -97,7 +108,10 @@ namespace GestaoPessoas.Services
                 existingWorker.JobTitle = worker.JobTitle;
                 existingWorker.BirthDate = worker.BirthDate;
                 existingWorker.TimeZone = worker.TimeZone;
+                existingWorker.PortalDasFinancasUserName = worker.PortalDasFinancasUserName;
+                existingWorker.PortalDasFinancasUserPassword = cryptoService.Encrypt(worker.PortalDasFinancasUserPassword)!;
                 SaveWorkersToJson(workers);
+                existingWorker.PortalDasFinancasUserPassword = cryptoService.Decrypt(existingWorker.PortalDasFinancasUserPassword)!;
                 return existingWorker;
             }
             else
@@ -106,5 +120,10 @@ namespace GestaoPessoas.Services
             }
         }
 
+        public Worker NonSensitiveWorker(Worker worker)
+        {
+            worker.PortalDasFinancasUserPassword = String.Empty;
+            return worker;
+        }
     }
 }

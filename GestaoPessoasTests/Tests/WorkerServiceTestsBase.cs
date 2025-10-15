@@ -37,7 +37,9 @@ namespace GestaoPessoasTests.Tests
                 JobTitle = "string",
                 Email = "user@example.com",
                 BirthDate = new DateOnly(2025, 09, 22),
-                TimeZone = TimeZoneInfo.Utc
+                TimeZone = TimeZoneInfo.Utc,
+                PortalDasFinancasUserName = "user13",
+                PortalDasFinancasUserPassword = "password"
             };
 
             Worker? realworker = service!.GetWorkerByIdIfExists(comparisonworker.Id);
@@ -61,7 +63,9 @@ namespace GestaoPessoasTests.Tests
                 JobTitle = "new job",
                 Email = "email@gmail.com",
                 BirthDate = new DateOnly(2025, 01, 01),
-                TimeZone = TimeZoneInfo.Utc
+                TimeZone = TimeZoneInfo.Utc,
+                PortalDasFinancasUserName = "newusername",
+                PortalDasFinancasUserPassword = "newpassword"
             };
             Worker addedworker = service!.AddWorker(newworker);
             Assert.AreNotEqual(0, addedworker.Id);
@@ -79,7 +83,9 @@ namespace GestaoPessoasTests.Tests
                 JobTitle = "UpdatedJob",
                 Email = "UpdatedEmail@gmail.com",
                 BirthDate = new DateOnly(2024, 01, 01),
-                TimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles")
+                TimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles"),
+                PortalDasFinancasUserName = "UpdatedUserName",
+                PortalDasFinancasUserPassword = "UpdatedPassword"
             };
             Worker? realworker = service!.GetWorkerByIdIfExists(updatedworker.Id);
             Assert.IsNotNull(realworker);
@@ -99,7 +105,9 @@ namespace GestaoPessoasTests.Tests
                 JobTitle = "UpdatedJob",
                 Email = "UpdatedEmail@gmail.com",
                 BirthDate = new DateOnly(2024, 01, 01),
-                TimeZone = TimeZoneInfo.Utc
+                TimeZone = TimeZoneInfo.Utc,
+                PortalDasFinancasUserName = "UpdatedUserName",
+                PortalDasFinancasUserPassword = "UpdatedPassword"
             };
             Worker? resultworker = service!.UpdateWorker(updatedworker);
             Assert.IsNull(resultworker);
@@ -134,7 +142,9 @@ namespace GestaoPessoasTests.Tests
                    worker1.JobTitle == worker2.JobTitle &&
                    worker1.Email == worker2.Email &&
                    worker1.BirthDate == worker2.BirthDate &&
-                   worker1.TimeZone.Id == worker2.TimeZone.Id;
+                   worker1.TimeZone.Id == worker2.TimeZone.Id &&
+                   worker1.PortalDasFinancasUserName == worker2.PortalDasFinancasUserName &&
+                   worker1.PortalDasFinancasUserPassword == worker2.PortalDasFinancasUserPassword;
         }
     }
 }
