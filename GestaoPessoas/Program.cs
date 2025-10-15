@@ -1,10 +1,11 @@
+using GestaoPessoas.DataSources;
 using GestaoPessoas.Documentacao.OpenApi;
 using GestaoPessoas.Middlewares;
 using GestaoPessoas.Services;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 
 builder.Configuration.AddJsonFile("appsettings.Development.LocalMachine.json", optional: true, reloadOnChange: true);
@@ -12,6 +13,7 @@ string? Implementation = builder.Configuration.GetValue<string>("WorkerService:I
 if (string.IsNullOrEmpty(Implementation))
     throw new InvalidOperationException("WorkerService:Implementation is not configured.");
 Implementation = Implementation.ToLower();
+builder.Services.AddDbContext<GestaoPessoasDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSingleton<ICryptoService, AesCryptoService>();
 switch (Implementation)
 {
@@ -46,6 +48,19 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+try
+{
+    using (IServiceScope serviceScope = app.Services.CreateScope())
+    {
+        GestaoPessoasDbContext databaseContext = serviceScope.ServiceProvider.GetRequiredService<GestaoPessoasDbContext>();
+        databaseContext.Database.Migrate();
+    }
+}
+catch (Exception ex)
+{
+    throw new Exception("Migração falhou, não foi possível migrar a base de dados.", ex);
+}
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();

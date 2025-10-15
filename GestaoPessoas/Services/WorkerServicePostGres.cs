@@ -1,126 +1,97 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Npgsql;
 using System.Reflection.Metadata.Ecma335;
-using GestaoPessoas.Dtos;
+using dto = GestaoPessoas.Dtos;
+using GestaoPessoas.DataSources;
+using ef = GestaoPessoas.Entities;
 
 namespace GestaoPessoas.Services
 {
     public class WorkerServicePostGres : IWorkerService
     {
+        private readonly GestaoPessoasDbContext dbContext;
 
-        private readonly string? _connectionString;
-
-        public WorkerServicePostGres(IConfiguration configuration)
+        public WorkerServicePostGres(GestaoPessoasDbContext dbContext)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            this.dbContext = dbContext;
         }
 
-        private Worker DataToWorker(NpgsqlDataReader datareader) { 
-            return new Worker
+        public dto.Worker AddWorker(dto.Worker worker)
+        {
+
+            ef.Worker new_worker = new ef.Worker
             {
-                Id = datareader.GetInt32(datareader.GetOrdinal("id")),
-                Name = datareader.GetString(datareader.GetOrdinal("name")),
-                JobTitle = datareader.GetString(datareader.GetOrdinal("job_title")),
-                Email = datareader.GetString(datareader.GetOrdinal("email")),
-                BirthDate = DateOnly.FromDateTime(datareader.GetDateTime(datareader.GetOrdinal("birth_date"))),
-                TimeZone = TimeZoneInfo.FindSystemTimeZoneById(
-                    datareader.GetString(datareader.GetOrdinal("time_zone"))
-                )
+                Name = worker.Name,
+                JobTitle = worker.JobTitle,
+                Email = worker.Email,
+                BirthDate = worker.BirthDate,
+                TimeZone = worker.TimeZone.Id
             };
+            dbContext.Workers.Add(new_worker);
+            dbContext.SaveChanges();
+            return GetWorkerByIdIfExists(new_worker.Id)!;
+
         }
 
-        public Worker AddWorker(Worker worker)
+        public IEnumerable<dto.Worker> GetAllWorkers()
         {
-
-            using (var conn = new NpgsqlConnection(_connectionString))
-            {
-                using var cmd = new NpgsqlCommand($"INSERT INTO workers (name, job_title, email, birth_date, time_zone) VALUES (@name, @job_title, @email, @birth_date, @time_zone) RETURNING id", conn);
-                cmd.Parameters.AddWithValue("name", worker.Name);
-                cmd.Parameters.AddWithValue("job_title", worker.JobTitle);
-                cmd.Parameters.AddWithValue("email", worker.Email);
-                cmd.Parameters.AddWithValue("birth_date", worker.BirthDate.ToDateTime(new TimeOnly(0, 0)));
-                cmd.Parameters.AddWithValue("time_zone", worker.TimeZone.Id);
-                conn.Open();
-                int? id = (int?)cmd.ExecuteScalar();
-                if (id == null) throw new Exception("Failed to add the new worker");
-                worker.Id = id.Value;
-                Worker? addedWorker = GetWorkerByIdIfExists(id.Value);
-                if (addedWorker == null) throw new Exception("Failed to retrieve the added worker");
-                return addedWorker;
-            }
-        }
-
-        public IEnumerable<Worker> GetAllWorkers()
-        {
-            var workers = new List<Worker>();
-            using var conn = new NpgsqlConnection(_connectionString);
-            conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date, time_zone FROM workers ORDER BY name", conn);
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                workers.Add(DataToWorker(reader));
-            }
+            List<dto.Worker> workers = (from w in dbContext.Workers
+                                        orderby w.Name
+                                        select new dto.Worker
+                                          {
+                                              Id = w.Id,
+                                              Name = w.Name,
+                                              JobTitle = w.JobTitle,
+                                              Email = w.Email,
+                                              BirthDate = w.BirthDate,
+                                              TimeZone = TimeZoneInfo.FindSystemTimeZoneById(w.TimeZone)
+                                          }).ToList();
             return workers;
         }
 
-        public Worker? GetWorkerByIdIfExists(int id)
+        public dto.Worker? GetWorkerByIdIfExists(int id)
         {
-            using var conn = new NpgsqlConnection(_connectionString);
-            conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT id, name, job_title, email, birth_date, time_zone FROM workers WHERE id = @id", conn);
-            cmd.Parameters.AddWithValue("id", id);
-            using var reader = cmd.ExecuteReader();
-            if (reader.Read())
-            {
-                return DataToWorker(reader);
-            }
-            else
-            {
-                return null;
-            }
+            dto.Worker? worker = (from w in dbContext.Workers
+                                    where w.Id == id
+                                    select new dto.Worker
+                                    {
+                                        Id = w.Id,
+                                        Name = w.Name,
+                                        JobTitle = w.JobTitle,
+                                        Email = w.Email,
+                                        BirthDate = w.BirthDate,
+                                        TimeZone = TimeZoneInfo.FindSystemTimeZoneById(w.TimeZone)
+                                    }).SingleOrDefault();
+            return worker;
         }
 
         public bool RemoveWorker(int id)
         {
-            using var conn = new NpgsqlConnection(_connectionString);
-            conn.Open();
-            using var transaction = conn.BeginTransaction();
-            using var cmd = new NpgsqlCommand("DELETE FROM workers WHERE id = @id", conn);
-            cmd.Parameters.AddWithValue("id", id);
-            int affectedRows = cmd.ExecuteNonQuery();
-            if (affectedRows > 1)
-            {
-                transaction.Rollback();
-                throw new Exception("Transaction cancelled, more than one worker found with the selected id.");
-            }
-            transaction.Commit();
-            return (affectedRows == 1);
+            ef.Worker? worker = (from w in dbContext.Workers
+                          where w.Id == id
+                          select w).SingleOrDefault();
+
+            if (worker == null) return false;
+            dbContext.Workers.Remove(worker);
+            dbContext.SaveChanges();
+            return true;
 
         }
 
-        public Worker? UpdateWorker(Worker worker)
+        public dto.Worker? UpdateWorker(dto.Worker worker)
         {
-            using var conn = new NpgsqlConnection(_connectionString);
-            conn.Open();
-            using var transaction = conn.BeginTransaction();
-            using var cmd = new NpgsqlCommand(
-                "UPDATE workers SET name = @name, job_title = @job_title, email = @email, birth_date = @birth_date, time_zone = @time_zone WHERE id = @id", 
-                conn, transaction);
-            cmd.Parameters.AddWithValue("id", worker.Id);
-            cmd.Parameters.AddWithValue("name", worker.Name);
-            cmd.Parameters.AddWithValue("job_title", worker.JobTitle);
-            cmd.Parameters.AddWithValue("email", worker.Email);
-            cmd.Parameters.AddWithValue("birth_date", worker.BirthDate.ToDateTime(new TimeOnly(0, 0)));
-            cmd.Parameters.AddWithValue("time_zone", worker.TimeZone.Id);
-            int affectedRows = cmd.ExecuteNonQuery();
-            if (affectedRows > 1)
-            {
-                transaction.Rollback();
-                throw new Exception("Transaction cancelled, more than one worker found with the selected id.");
-            }
-            transaction.Commit();
-            return affectedRows == 1 ? GetWorkerByIdIfExists(worker.Id) : null;
+            var current_worker = (from w in dbContext.Workers
+                          where w.Id == worker.Id
+                          select w).SingleOrDefault();
+
+            if (current_worker == null) return null;
+            current_worker.Name = worker.Name;
+            current_worker.JobTitle = worker.JobTitle;
+            current_worker.Email = worker.Email;
+            current_worker.BirthDate = worker.BirthDate;
+            current_worker.TimeZone = worker.TimeZone.Id;
+            dbContext.SaveChanges();
+            return GetWorkerByIdIfExists(worker.Id);
         }
     }
 }

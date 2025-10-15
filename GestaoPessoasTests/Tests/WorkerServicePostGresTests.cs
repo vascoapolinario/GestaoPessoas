@@ -1,5 +1,7 @@
-﻿using GestaoPessoas.Dtos;
+﻿using GestaoPessoas.DataSources;
+using GestaoPessoas.Dtos;
 using GestaoPessoas.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
@@ -21,22 +23,26 @@ namespace GestaoPessoasTests.Tests
         public void Initialize()
         {
             applicationDomain = new TestApplicationDomain();
+
+            string? _connectionString = applicationDomain.configuration.GetConnectionString("DefaultConnection");
+            if (_connectionString == null) Assert.Inconclusive("Não foi possível obter a connection string de configuração.");
+
+            applicationDomain.Services.AddDbContext<GestaoPessoasDbContext>(o => o.UseNpgsql(_connectionString));
             applicationDomain.Services.AddScoped<IWorkerService, WorkerServicePostGres>();
             service = applicationDomain.ServiceProvider.GetRequiredService<IWorkerService>();
 
-            var configuration = applicationDomain.ServiceProvider.GetRequiredService<IConfiguration>();
-            string? _connectionString = configuration.GetConnectionString("DefaultConnection");
-            if (_connectionString == null) Assert.Inconclusive("Não foi possível obter a connection string de configuração.");
-            string? BackupPath = configuration.GetValue<string>("PostGresWorkerService:FilePath");
+            string? BackupPath = applicationDomain.configuration.GetValue<string>("PostGresWorkerService:FilePath");
             if (BackupPath == null) throw new Exception("Não foi possível obter o caminho do ficheiro de configuração.");
 
             string sql = File.ReadAllText(BackupPath);
 
-            using var conn = new NpgsqlConnection(_connectionString);
+            using (IServiceScope serviceScope = applicationDomain.ServiceProvider.CreateScope())
             {
-                conn.Open();
-                using var cmd = new NpgsqlCommand(sql, conn);
-                cmd.ExecuteNonQuery();
+                GestaoPessoasDbContext databaseContext = serviceScope.ServiceProvider.GetRequiredService<GestaoPessoasDbContext>();
+                databaseContext.Database.Migrate();
+                databaseContext.Database.ExecuteSqlRaw(sql);
+                databaseContext.SaveChanges();
+
             }
         }       
     }
