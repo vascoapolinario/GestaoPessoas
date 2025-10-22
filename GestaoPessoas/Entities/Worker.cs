@@ -46,5 +46,18 @@ namespace GestaoPessoas.Entities
         /// </summary>
         [Required]
         public string TimeZone { get; set; } = TimeZoneInfo.Utc.Id;
+
+
+        /// <summary>
+        /// Username do utilzador no Portal das Finanças, string com maximo de 100 caracteres, exemplo:
+        /// </summary>
+        [Required]
+        [StringLength(100)]
+        public string PortalDasFinancasUserName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Password do utilzador no Portal das Finanças, string.
+        /// </summary>
+        public string? PortalDasFinancasUserPassword { get; set; } = null;
     }
 }

@@ -20,7 +20,7 @@ namespace GestaoPessoas.Services
             _salt = salt;
         }
 
-        string? ICryptoService.Encrypt(string value)
+        string? ICryptoService.Encrypt(string? value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -51,7 +51,7 @@ namespace GestaoPessoas.Services
             }
         }
 
-        string? ICryptoService.Decrypt(string value)
+        string? ICryptoService.Decrypt(string? value)
         {
             if (string.IsNullOrEmpty(value))
             {
