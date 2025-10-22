@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Npgsql;
-using System.Reflection.Metadata.Ecma335;
-using DtoEntities = GestaoPessoas.Dtos;
-using GestaoPessoas.DataSources;
-using EfEntities = GestaoPessoas.Entities;
+﻿using GestaoPessoas.DataSources;
+using Dto = GestaoPessoas.Dtos;
+using Ef = GestaoPessoas.Entities;
 
 namespace GestaoPessoas.Services
 {
@@ -18,10 +15,10 @@ namespace GestaoPessoas.Services
             this.cryptoService = cryptoService;
         }
 
-        public DtoEntities.Worker AddWorker(DtoEntities.Worker worker)
+        public Dto.Worker AddWorker(Dto.Worker worker)
         {
 
-            EfEntities.Worker new_worker = new EfEntities.Worker
+            Ef.Worker new_worker = new Ef.Worker
             {
                 Name = worker.Name,
                 JobTitle = worker.JobTitle,
@@ -37,11 +34,11 @@ namespace GestaoPessoas.Services
 
         }
 
-        public IEnumerable<DtoEntities.Worker> GetAllWorkers()
+        public IEnumerable<Dto.Worker> GetAllWorkers()
         {
-            List<DtoEntities.Worker> workers = (from w in dbContext.Workers
+            List<Dto.Worker> workers = (from w in dbContext.Workers
                                         orderby w.Name
-                                        select new DtoEntities.Worker
+                                        select new Dto.Worker
                                         {
                                             Id = w.Id,
                                             Name = w.Name,
@@ -50,18 +47,16 @@ namespace GestaoPessoas.Services
                                             BirthDate = w.BirthDate,
                                             TimeZone = TimeZoneInfo.FindSystemTimeZoneById(w.TimeZone),
                                             PortalDasFinancasUserName = w.PortalDasFinancasUserName,
-                                            PortalDasFinancasUserPassword = string.IsNullOrEmpty(w.PortalDasFinancasUserPassword)
-                                                ? string.Empty
-                                                : cryptoService.Decrypt(w.PortalDasFinancasUserPassword)!
+                                            PortalDasFinancasUserPassword = cryptoService.Decrypt(w.PortalDasFinancasUserPassword)
                                         }).ToList();
             return workers;
         }
 
-        public DtoEntities.Worker? GetWorkerByIdIfExists(int id)
+        public Dto.Worker? GetWorkerByIdIfExists(int id)
         {
-            DtoEntities.Worker? worker = (from w in dbContext.Workers
+            Dto.Worker? worker = (from w in dbContext.Workers
                                   where w.Id == id
-                                  select new DtoEntities.Worker
+                                  select new Dto.Worker
                                   {
                                       Id = w.Id,
                                       Name = w.Name,
@@ -70,9 +65,7 @@ namespace GestaoPessoas.Services
                                       BirthDate = w.BirthDate,
                                       TimeZone = TimeZoneInfo.FindSystemTimeZoneById(w.TimeZone),
                                       PortalDasFinancasUserName = w.PortalDasFinancasUserName,
-                                      PortalDasFinancasUserPassword = string.IsNullOrEmpty(w.PortalDasFinancasUserPassword)
-                                                ? string.Empty
-                                                : cryptoService.Decrypt(w.PortalDasFinancasUserPassword)!
+                                      PortalDasFinancasUserPassword = cryptoService.Decrypt(w.PortalDasFinancasUserPassword)
 
                                   }).SingleOrDefault();
             return worker;
@@ -80,7 +73,7 @@ namespace GestaoPessoas.Services
 
         public bool RemoveWorker(int id)
         {
-            EfEntities.Worker? worker = (from w in dbContext.Workers
+            Ef.Worker? worker = (from w in dbContext.Workers
                                  where w.Id == id
                                  select w).SingleOrDefault();
 
@@ -91,7 +84,7 @@ namespace GestaoPessoas.Services
 
         }
 
-        public DtoEntities.Worker? UpdateWorker(DtoEntities.Worker worker)
+        public Dto.Worker? UpdateWorker(Dto.Worker worker)
         {
             var current_worker = (from w in dbContext.Workers
                                   where w.Id == worker.Id
@@ -109,10 +102,9 @@ namespace GestaoPessoas.Services
             return GetWorkerByIdIfExists(worker.Id);
         }
 
-        public DtoEntities.Worker NonSensitiveWorker(DtoEntities.Worker worker)
+        public void ClearSensitiveData(params Dto.Worker[] workers)
         {
-            worker.PortalDasFinancasUserPassword = String.Empty;
-            return worker;
+            foreach (var worker in workers) worker.PortalDasFinancasUserPassword = null;
         }
     }
 }

@@ -9,6 +9,6 @@ namespace GestaoPessoas.Services
         Worker AddWorker(Worker worker);
         bool RemoveWorker(int id);
         Worker? UpdateWorker(Worker worker);
-        Worker NonSensitiveWorker(Worker worker);
+        void ClearSensitiveData(params Worker[] workers);
     }
 }

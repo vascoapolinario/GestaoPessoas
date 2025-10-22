@@ -1,10 +1,5 @@
 ﻿using GestaoPessoas.Dtos;
 using GestaoPessoas.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GestaoPessoasTests.Tests
 {
@@ -130,6 +125,30 @@ namespace GestaoPessoasTests.Tests
             Assert.IsFalse(result);
         }
 
+        [TestMethod]
+        public void TestClearSensitiveData()
+        {
+            Worker newworker = new Worker
+            {
+                Name = "new worker",
+                JobTitle = "new job",
+                Email = "email@gmail.com",
+                BirthDate = new DateOnly(2025, 01, 01),
+                TimeZone = TimeZoneInfo.Utc,
+                PortalDasFinancasUserName = "newusername",
+                PortalDasFinancasUserPassword = "newpassword"
+            };
+            service!.ClearSensitiveData(newworker);
+            Assert.IsNotNull(newworker);
+            Assert.IsNull(newworker.PortalDasFinancasUserPassword);
+            Assert.IsNotNull(newworker.Name);
+            Assert.IsNotNull(newworker.JobTitle);
+            Assert.IsNotNull(newworker.Email);
+            Assert.IsNotNull(newworker.BirthDate);
+            Assert.IsNotNull(newworker.TimeZone);
+            Assert.IsNotNull(newworker.PortalDasFinancasUserName);
+        }
+
         public void Dispose()
         {
             Cleanup();
@@ -137,7 +156,7 @@ namespace GestaoPessoasTests.Tests
 
         private bool WorkersAreEqual(Worker worker1, Worker worker2)
         {
-            return 
+            return
                    worker1.Name == worker2.Name &&
                    worker1.JobTitle == worker2.JobTitle &&
                    worker1.Email == worker2.Email &&

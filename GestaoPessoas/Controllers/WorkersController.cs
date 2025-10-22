@@ -1,9 +1,6 @@
-using DtoEntities = GestaoPessoas.Dtos;
-using GestaoPessoas.Entities;
 using GestaoPessoas.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks.Dataflow;
+using DtoEntities = GestaoPessoas.Dtos;
 
 namespace GestaoPessoas.Controllers
 {
@@ -32,9 +29,9 @@ namespace GestaoPessoas.Controllers
         public ActionResult<IEnumerable<DtoEntities.Worker>> GetWorkers()
         {
             IEnumerable<DtoEntities.Worker> workers = WorkerService.GetAllWorkers();
-            var nonSensitiveWorkers = workers.Select(worker => WorkerService.NonSensitiveWorker(worker)).ToList();
+            WorkerService.ClearSensitiveData(workers.ToArray());
 
-            return Ok(nonSensitiveWorkers);
+            return Ok(workers);
         }
 
         /// <summary>
@@ -52,7 +49,8 @@ namespace GestaoPessoas.Controllers
             {
                 return NotFound();
             }
-            return Ok(WorkerService.NonSensitiveWorker(worker));
+            WorkerService.ClearSensitiveData(worker);
+            return Ok(worker);
         }
 
         /// <summary>
@@ -66,9 +64,9 @@ namespace GestaoPessoas.Controllers
         public ActionResult<DtoEntities.Worker> AddWorker([FromBody] DtoEntities.Worker newworker)
         {
             DtoEntities.Worker createdWorker = WorkerService.AddWorker(newworker);
-            DtoEntities.Worker createdNonSensitiveWorker = WorkerService.NonSensitiveWorker(createdWorker);
+            WorkerService.ClearSensitiveData(createdWorker);
 
-            return CreatedAtAction(nameof(GetWorker), new {id = createdNonSensitiveWorker.Id}, createdNonSensitiveWorker);
+            return CreatedAtAction(nameof(GetWorker), new { id = createdWorker.Id }, createdWorker);
         }
 
 
@@ -95,22 +93,23 @@ namespace GestaoPessoas.Controllers
         /// <summary>
         /// Atualiza um trabalhador.
         /// </summary>
-        /// <param name="updatedWorker">Trabalhador a atualizar</param>
+        /// <param name="worker">Trabalhador a atualizar</param>
         /// <returns>Resposta do tipo 200 com o trabalhador se encontrado, 400 caso o pedido contenha dados invalidos ou 404 se o trabalhador não for encontrado.</returns>
         [HttpPut(Name = "UpdateWorker")]
         [ProducesResponseType(typeof(DtoEntities.Worker), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public ActionResult<DtoEntities.Worker> UpdateWorker([FromBody] DtoEntities.Worker updatedWorker)
+        public ActionResult<DtoEntities.Worker> UpdateWorker([FromBody] DtoEntities.Worker worker)
         {
 
-            var worker = WorkerService.UpdateWorker(updatedWorker);
-              
-            if (worker is null)
+            var updatedWorker = WorkerService.UpdateWorker(worker);
+
+            if (updatedWorker is null)
             {
-                return NotFound($"Worker with ID {updatedWorker.Id} not found.");
+                return NotFound($"Worker with ID {worker.Id} not found.");
             }
-            return Ok(WorkerService.NonSensitiveWorker(worker));
+            WorkerService.ClearSensitiveData(updatedWorker);
+            return Ok(updatedWorker);
         }
     }
 }

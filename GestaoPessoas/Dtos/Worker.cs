@@ -1,5 +1,4 @@
 using GestaoPessoas.Validators;
-using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
 
 namespace GestaoPessoas.Dtos
@@ -58,7 +57,7 @@ namespace GestaoPessoas.Dtos
         /// <summary>
         /// Password do utilzador no Portal das Finanças, string.
         /// </summary>
-        public string PortalDasFinancasUserPassword { get; set; } = string.Empty;
+        public string? PortalDasFinancasUserPassword { get; set; } = null;
 
         public override string ToString()
         {
