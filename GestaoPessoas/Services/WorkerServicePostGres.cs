@@ -47,7 +47,8 @@ namespace GestaoPessoas.Services
                                             BirthDate = w.BirthDate,
                                             TimeZone = TimeZoneInfo.FindSystemTimeZoneById(w.TimeZone),
                                             PortalDasFinancasUserName = w.PortalDasFinancasUserName,
-                                            PortalDasFinancasUserPassword = cryptoService.Decrypt(w.PortalDasFinancasUserPassword)
+                                            PortalDasFinancasUserPassword = cryptoService.Decrypt(w.PortalDasFinancasUserPassword),
+                                            ProjectsCount = w.Projects.Count()
                                         }).ToList();
             return workers;
         }
@@ -65,7 +66,8 @@ namespace GestaoPessoas.Services
                                       BirthDate = w.BirthDate,
                                       TimeZone = TimeZoneInfo.FindSystemTimeZoneById(w.TimeZone),
                                       PortalDasFinancasUserName = w.PortalDasFinancasUserName,
-                                      PortalDasFinancasUserPassword = cryptoService.Decrypt(w.PortalDasFinancasUserPassword)
+                                      PortalDasFinancasUserPassword = cryptoService.Decrypt(w.PortalDasFinancasUserPassword),
+                                      ProjectsCount = w.Projects.Count
 
                                   }).SingleOrDefault();
             return worker;
@@ -77,7 +79,11 @@ namespace GestaoPessoas.Services
                                  where w.Id == id
                                  select w).SingleOrDefault();
 
-            if (worker == null) return false;
+            if (worker == null || worker.Projects.Count > 0) return false;
+            var attendance_records = from ar in dbContext.AttendanceRecords
+                                     where ar.WorkerId == id
+                                     select ar;
+            dbContext.AttendanceRecords.RemoveRange(attendance_records);
             dbContext.Workers.Remove(worker);
             dbContext.SaveChanges();
             return true;

@@ -48,7 +48,7 @@ namespace GestaoPessoas.Entities
         public string TimeZone { get; set; } = TimeZoneInfo.Utc.Id;
 
 
-        /// <summary>
+        /// <summary>   
         /// Username do utilzador no Portal das Finanças, string com maximo de 100 caracteres, exemplo:
         /// </summary>
         [Required]
@@ -59,5 +59,11 @@ namespace GestaoPessoas.Entities
         /// Password do utilzador no Portal das Finanças, string.
         /// </summary>
         public string? PortalDasFinancasUserPassword { get; set; } = null;
+
+        public virtual ICollection<AttendanceRecord> AttendanceRecords { get; set; } = new List<AttendanceRecord>();
+
+        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+
     }
 }

@@ -15,6 +15,8 @@ if (string.IsNullOrEmpty(Implementation))
 Implementation = Implementation.ToLower();
 builder.Services.AddDbContext<GestaoPessoasDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSingleton<ICryptoService, AesCryptoService>();
+builder.Services.AddScoped<ProjectService, ProjectService>();
+builder.Services.AddScoped<AttendanceRecordService, AttendanceRecordService>();
 switch (Implementation)
 {
     case "postgres":
