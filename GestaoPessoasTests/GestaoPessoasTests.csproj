@@ -10,11 +10,21 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="BackupProjectsTestesInicial.sql" />
     <None Remove="BackupTestesInicial.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="BackupAttendanceRecordTestesInicial.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BackupProjectsTestesInicial.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="BackupTestesInicial.json">

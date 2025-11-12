@@ -22,6 +22,48 @@ namespace GestaoPessoas.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("GestaoPessoas.Entities.AttendanceRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("EventDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("WorkerId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("AttendanceRecords");
+                });
+
+            modelBuilder.Entity("GestaoPessoas.Entities.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Projects");
+                });
+
             modelBuilder.Entity("GestaoPessoas.Entities.Worker", b =>
                 {
                     b.Property<int>("Id")
@@ -63,6 +105,52 @@ namespace GestaoPessoas.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Workers");
+                });
+
+            modelBuilder.Entity("ProjectWorker", b =>
+                {
+                    b.Property<int>("ProjectsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WorkersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ProjectsId", "WorkersId");
+
+                    b.HasIndex("WorkersId");
+
+                    b.ToTable("ProjectWorker");
+                });
+
+            modelBuilder.Entity("GestaoPessoas.Entities.AttendanceRecord", b =>
+                {
+                    b.HasOne("GestaoPessoas.Entities.Worker", "Worker")
+                        .WithMany("AttendanceRecords")
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Worker");
+                });
+
+            modelBuilder.Entity("ProjectWorker", b =>
+                {
+                    b.HasOne("GestaoPessoas.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GestaoPessoas.Entities.Worker", null)
+                        .WithMany()
+                        .HasForeignKey("WorkersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GestaoPessoas.Entities.Worker", b =>
+                {
+                    b.Navigation("AttendanceRecords");
                 });
 #pragma warning restore 612, 618
         }

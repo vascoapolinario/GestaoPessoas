@@ -48,7 +48,7 @@ namespace GestaoPessoas.Dtos
         public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.Utc;
 
         /// <summary>
-        /// Username do utilzador no Portal das Finanças, string com maximo de 100 caracteres, exemplo:
+        /// Username do utilzador no Portal das Finanças, string com maximo de 100 caracteres
         /// </summary>
         [Required]
         [StringLength(100)]
@@ -58,6 +58,12 @@ namespace GestaoPessoas.Dtos
         /// Password do utilzador no Portal das Finanças, string.
         /// </summary>
         public string? PortalDasFinancasUserPassword { get; set; } = null;
+
+        /// <summary>
+        /// Numero de projetos associados ao trabalhador. Tipo: int
+        /// </summary>
+
+        public int ProjectsCount { get; set; } = 0;
 
         public override string ToString()
         {
