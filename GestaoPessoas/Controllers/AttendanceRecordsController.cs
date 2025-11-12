@@ -1,6 +1,6 @@
 ﻿using GestaoPessoas.Services;
 using Microsoft.AspNetCore.Mvc;
-using DtoEntities = GestaoPessoas.Dtos;
+using Dtos = GestaoPessoas.Dtos;
 
 namespace GestaoPessoas.Controllers
 {
@@ -23,10 +23,10 @@ namespace GestaoPessoas.Controllers
         /// </summary>
         /// <returns>Lista de registos de presenças</returns>
         [HttpGet(Name = "AttendanceRecords")]
-        [ProducesResponseType(typeof(IEnumerable<DtoEntities.AttendanceRecord>), StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<DtoEntities.AttendanceRecord>> GetAttendanceRecords()
+        [ProducesResponseType(typeof(IEnumerable<Dtos.AttendanceRecord>), StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<Dtos.AttendanceRecord>> GetAttendanceRecords()
         {
-            IEnumerable<DtoEntities.AttendanceRecord> attendanceRecords = AttendanceRecordService.GetAllAttendanceRecords();
+            IEnumerable<Dtos.AttendanceRecord> attendanceRecords = AttendanceRecordService.GetAllAttendanceRecords();
             return Ok(attendanceRecords);
 
         }
@@ -36,9 +36,9 @@ namespace GestaoPessoas.Controllers
         /// </summary>
         /// <returns>O registo de presenças caso seja encontrado, caso contrário resposta NotFound</returns>
         [HttpGet("{id}", Name = "AttendanceRecord")]
-        [ProducesResponseType(typeof(DtoEntities.AttendanceRecord), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dtos.AttendanceRecord), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<DtoEntities.AttendanceRecord> GetAttendanceRecord(int id)
+        public ActionResult<Dtos.AttendanceRecord> GetAttendanceRecord(int id)
         {
             var attendanceRecord = AttendanceRecordService.GetAttendanceRecordByIdIfExists(id);
             if (attendanceRecord is null)
@@ -55,10 +55,10 @@ namespace GestaoPessoas.Controllers
         /// <param name="newAttendanceRecord">O novo registo de presenças a adicionar</param>
         /// <returns>O registo de presenças e o seu url juntamente com resposta 201 ou 400 caso o pedido contenha dados invalidos ou 404 se o Worker não existir</returns>
         [HttpPost(Name = "AddAttendanceRecord")]
-        [ProducesResponseType(typeof(DtoEntities.AttendanceRecord), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Dtos.AttendanceRecord), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<DtoEntities.AttendanceRecord> AddAttendanceRecord(DtoEntities.AttendanceRecord newAttendanceRecord)
+        public ActionResult<Dtos.AttendanceRecord> AddAttendanceRecord(Dtos.AttendanceRecord newAttendanceRecord)
         {
             var addedRecord = AttendanceRecordService.AddAttendanceRecord(newAttendanceRecord);
             if (addedRecord is null)
@@ -92,10 +92,10 @@ namespace GestaoPessoas.Controllers
         /// <param name="AttendanceRecordToUpdate">Registo de presenças com os dados a atualizar</param>
         /// <returns>O registo de presenças atualizado com resposta 200 se sucesso,400 caso haja dados invalidos e 404 caso o registo não seja encontrado</returns>
         [HttpPut(Name = "UpdateAttendanceRecord")]
-        [ProducesResponseType(typeof(DtoEntities.AttendanceRecord), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dtos.AttendanceRecord), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<DtoEntities.AttendanceRecord> UpdateAttendanceRecord(DtoEntities.AttendanceRecord AttendanceRecordToUpdate)
+        public ActionResult<Dtos.AttendanceRecord> UpdateAttendanceRecord(Dtos.AttendanceRecord AttendanceRecordToUpdate)
         {
             var updatedRecord = AttendanceRecordService.UpdateAttendanceRecord(AttendanceRecordToUpdate);
             if (updatedRecord is null)

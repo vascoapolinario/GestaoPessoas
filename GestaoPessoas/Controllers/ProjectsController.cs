@@ -1,6 +1,6 @@
 ﻿using GestaoPessoas.Services;
 using Microsoft.AspNetCore.Mvc;
-using DtoEntities = GestaoPessoas.Dtos;
+using Dtos = GestaoPessoas.Dtos;
 
 namespace GestaoPessoas.Controllers
 {
@@ -25,10 +25,10 @@ namespace GestaoPessoas.Controllers
         /// </summary>
         /// <returns>Lista de Projetos</returns>
         [HttpGet(Name = "Projects")]
-        [ProducesResponseType(typeof(IEnumerable<DtoEntities.Project>), StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<DtoEntities.Project>> GetProjects()
+        [ProducesResponseType(typeof(IEnumerable<Dtos.Project>), StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<Dtos.Project>> GetProjects()
         {
-            IEnumerable<DtoEntities.Project> Projects = ProjectService.GetAllProjects();
+            IEnumerable<Dtos.Project> Projects = ProjectService.GetAllProjects();
 
             return Ok(Projects);
         }
@@ -39,9 +39,9 @@ namespace GestaoPessoas.Controllers
         /// <param name="id">Id do Projeto.</param>
         /// <returns>O Projeto caso seja encontrado, caso contrário resposta NotFound</returns>
         [HttpGet("{id}", Name = "Project")]
-        [ProducesResponseType(typeof(DtoEntities.Project), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dtos.Project), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<DtoEntities.Project> GetProject(int id)
+        public ActionResult<Dtos.Project> GetProject(int id)
         {
             var Project = ProjectService.GetProjectByIdIfExists(id);
             if (Project is null)
@@ -57,11 +57,11 @@ namespace GestaoPessoas.Controllers
         /// <param name="newproject">O novo projeto a adicionar</param>
         /// <returns>O projeto e o seu url juntamente com resposta 201 ou 400 caso o pedido contenha dados invalidos</returns>
         [HttpPost(Name = "AddProject")]
-        [ProducesResponseType(typeof(DtoEntities.Project), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Dtos.Project), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public ActionResult<DtoEntities.Project> AddProject([FromBody] DtoEntities.Project newproject)
+        public ActionResult<Dtos.Project> AddProject([FromBody] Dtos.Project newproject)
         {
-            DtoEntities.Project? createdProject = ProjectService.AddProject(newproject);
+            Dtos.Project? createdProject = ProjectService.AddProject(newproject);
             if (createdProject is null)
             {
                 return BadRequest("Projected with name '" + newproject.Name + "' already exists.");
@@ -97,10 +97,10 @@ namespace GestaoPessoas.Controllers
         /// <param name="worker">Projeto a atualizar</param>
         /// <returns>Resposta do tipo 200 com o projeto se encontrado, 400 caso o pedido contenha dados invalidos ou 404 se o projeto não for encontrado.</returns>
         [HttpPut(Name = "UpdateProject")]
-        [ProducesResponseType(typeof(DtoEntities.Project), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dtos.Project), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public ActionResult<DtoEntities.Project> UpdateProject([FromBody] DtoEntities.Project worker)
+        public ActionResult<Dtos.Project> UpdateProject([FromBody] Dtos.Project worker)
         {
 
             var updatedProject = ProjectService.UpdateProject(worker);
@@ -119,10 +119,10 @@ namespace GestaoPessoas.Controllers
         /// <param name="workerId">Id do trabalhador.</param>
         /// <returns>Resposta do tipo 200 com o projeto, resposta do tipo 400 se o trabalhador ou projeto não foram encontrados</returns>
         [HttpPost("AddWorkerToProject", Name = "AddWorkerToProject")]
-        [ProducesResponseType(typeof(DtoEntities.Project), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dtos.Project), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<DtoEntities.Project> AddWorkerToProject([FromQuery] int projectId, [FromQuery] int workerId)
+        public ActionResult<Dtos.Project> AddWorkerToProject([FromQuery] int projectId, [FromQuery] int workerId)
         {
             if (ProjectService.IsWorkerInProject(projectId, workerId))
             {
@@ -143,10 +143,10 @@ namespace GestaoPessoas.Controllers
         /// <param name="workerId">Id do trabalhador.</param>
         /// <returns>Resposta do tipo 200 com o projeto, resposta do tipo 404 se o trabalhador ou projeto não foram encontrados</returns>
         [HttpPost("RemoveWorkerFromProject", Name = "RemoveWorkerFromProject")]
-        [ProducesResponseType(typeof(DtoEntities.Project), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dtos.Project), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<DtoEntities.Project> RemoveWorkerFromProject([FromQuery] int projectId, [FromQuery] int workerId)
+        public ActionResult<Dtos.Project> RemoveWorkerFromProject([FromQuery] int projectId, [FromQuery] int workerId)
         {
             if (!ProjectService.IsWorkerInProject(projectId, workerId))
             {
